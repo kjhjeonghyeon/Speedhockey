@@ -11,7 +11,7 @@ public class MyServer
 {
     Socket mainSock;
     List<Socket> connectedClients = new List<Socket>();
-    int m_port = 5000;
+    int m_port = 11000;
     public void Start()
     {
         try
@@ -67,30 +67,56 @@ public class MyServer
     {
         try
         {
+            AsyncObject obj = new AsyncObject(30);
+
             Socket client = mainSock.EndAccept(ar);
-            AsyncObject obj = new AsyncObject(1920 * 1080 * 3);
             obj.WorkingSocket = client;
-            connectedClients.Add(client);
-            client.BeginReceive(obj.Buffer, 0, 1920 * 1080 * 3, 0, DataReceived, obj);
-            string stringData = Encoding.Default.GetString(obj.Buffer);
-            Debug.Log(stringData);
-            mainSock.BeginAccept(AcceptCallback, null);
+            //Socket client = mainSock.EndAccept(ar);
+            
+
+            // 다음 데이터 수신 대기
+            client.BeginReceive(obj.Buffer, 0, obj.Buffer.Length, 0, DataReceived, obj);
+
+
+            //AsyncObject obj = new AsyncObject(1920 * 1080 * 3);
+            //obj.WorkingSocket = client;
+            //connectedClients.Add(client);
+            //client.BeginReceive(obj.Buffer, 0, 1920 * 1080 * 3, 0, DataReceived, obj);
+            //string stringData = Encoding.Default.GetString(obj.Buffer);
+            //Debug.Log(stringData);
+            //mainSock.BeginAccept(AcceptCallback, null);
         }
         catch (Exception e)
-        { }
+        { Debug.LogError("Error in accept callback: " + e.Message); }
     }
 
     void DataReceived(IAsyncResult ar)
     {
         AsyncObject obj = (AsyncObject)ar.AsyncState;
 
-        int received = obj.WorkingSocket.EndReceive(ar);
+        try
+        {
+            int bytesRead = obj.WorkingSocket.EndReceive(ar);
 
-        byte[] buffer = new byte[received];
-       
-        Array.Copy(obj.Buffer, 0, buffer, 0, received);
+            if (bytesRead > 0)
+            {
+                byte[] receivedData = new byte[bytesRead];
+                Array.Copy(obj.Buffer, 0, receivedData, 0, bytesRead);
+
+                // 여기서 receivedData를 활용하여 필요한 작업 수행
+                // 예시: 문자열로 변환하여 출력
+                string receivedString = Encoding.Default.GetString(receivedData);
+                Debug.Log("Received: " + receivedString);
+            }
+
+            // 다음 데이터 수신 대기
+            obj.WorkingSocket.BeginReceive(obj.Buffer, 0, obj.Buffer.Length, 0, DataReceived, obj);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError("Error in DataReceived: " + e.Message);
+        }
     }
-
 
 }
 

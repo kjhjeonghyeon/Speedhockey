@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 
 public class PlayerMove : MonoBehaviour
@@ -21,11 +23,28 @@ public class PlayerMove : MonoBehaviour
     }
     void InputMove()
     {
-        if (Input.GetAxis("Mouse X") != 0 || Input.GetAxis("Mouse Y") != 0)
+        float mouse_X = Input.GetAxis("Mouse X");
+        float mouse_Y = Input.GetAxis("Mouse Y");
+        
+        if ((mouse_X != 0 || mouse_Y != 0) && MyClient.client != null)
         {
-            movePosition = new Vector3(Input.GetAxis("Mouse X"), 0, Input.GetAxis("Mouse Y"));
+        Debug.Log(MyClient.client + " " + MyClient.client.Connected);
+            movePosition = new Vector3(mouse_X, 0, mouse_Y);
             transform.position += movePosition * Time.deltaTime * speed;
-        }
+
+            try
+            {
+                //입력및 출력
+                byte[] buf = Encoding.Default.GetBytes("MOVE : " + mouse_X + " : " + mouse_Y);
+                MyClient.client.GetStream().Write(buf, 0, buf.Length);
+                MyClient.client.GetStream().Flush();
+             }
+            catch (Exception e)
+            {
+                Debug.LogError("Exception during network write: " + e.Message);
+            }
+        //MyClientclient.GetStream().Write(buf, 0, buf.Length);
+    }
 
     }
 

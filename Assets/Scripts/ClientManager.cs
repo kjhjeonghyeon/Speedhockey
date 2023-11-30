@@ -8,6 +8,7 @@ public class ClientManager : MonoBehaviour
     void Awake()
     {
         MyClient myClient = new MyClient();
+        myClient.Start();
     }
 
     // Update is called once per frame
