@@ -7,11 +7,13 @@ using UnityEngine;
 public class PlayerMove : MonoBehaviour
 {
     Vector3 movePosition;
-    int speed = 3;
+    public int speed = 3;
+    Rigidbody rb;
 
     // Start is called before the first frame update
     void Start()
     {
+        rb = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
@@ -30,7 +32,9 @@ public class PlayerMove : MonoBehaviour
         {
         Debug.Log(MyClient.client + " " + MyClient.client.Connected);
             movePosition = new Vector3(mouse_X, 0, mouse_Y);
-            transform.position += movePosition * Time.deltaTime * speed;
+            rb.velocity = movePosition.normalized * speed;
+            //Debug.Log(rb.velocity);
+            //transform.position += movePosition * Time.deltaTime * speed;
 
             try
             {
