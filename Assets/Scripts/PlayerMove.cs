@@ -39,10 +39,10 @@ public class PlayerMove : MonoBehaviour
             try
             {
                 //입력및 출력
-                byte[] buf = Encoding.Default.GetBytes("MOVE : " + mouse_X + " : " + mouse_Y);
+                byte[] buf = Encoding.Default.GetBytes("MOVE:" + mouse_X + ":" + mouse_Y);
                 //MyClient.client.GetStream().Write(buf, 0, buf.Length);
                 //MyClient.client.GetStream().Flush();
-                //MyClient.instance.Send(buf);
+                MyClient.instance.Send(buf);
             }
             catch (Exception e)
             {

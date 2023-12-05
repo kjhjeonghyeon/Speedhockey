@@ -77,12 +77,13 @@ public class MyServer
     {
         try
         {
-            AsyncObject obj = new AsyncObject(300);
+            AsyncObject obj = new AsyncObject(30);
 
             Socket client = mainSock.EndAccept(ar);
             obj.WorkingSocket = client;
             socketList.Add(client);
             //Socket client = mainSock.EndAccept(ar);
+
 
 
             // 다음 데이터 수신 대기
@@ -95,7 +96,7 @@ public class MyServer
             //client.BeginReceive(obj.Buffer, 0, 1920 * 1080 * 3, 0, DataReceived, obj);
             //string stringData = Encoding.Default.GetString(obj.Buffer);
             //Debug.Log(stringData);
-            //mainSock.BeginAccept(AcceptCallback, null);
+            mainSock.BeginAccept(AcceptCallback, null);
         }
         catch (Exception e)
         { Debug.LogError("Error in accept callback: " + e.Message); }
@@ -109,9 +110,13 @@ public class MyServer
         {
             int bytesRead = obj.WorkingSocket.EndReceive(ar);
 
-            if(socketList[0] == obj.WorkingSocket)
+            if (socketList[0] == obj.WorkingSocket)
             {
                 Debug.Log("나 같음");
+            }
+            else
+            {
+                Debug.Log("나 다름");
             }
 
             if (bytesRead > 0)
@@ -122,6 +127,24 @@ public class MyServer
                 // 여기서 receivedData를 활용하여 필요한 작업 수행
                 // 예시: 문자열로 변환하여 출력
                 string receivedString = Encoding.Default.GetString(receivedData);
+                if (receivedString != "")
+                {
+                    string[] commands = receivedString.Split(":");
+                    if (commands.Length > 0)
+                    {
+                        if (commands[0] == "Move")
+                        {
+                            float moveX = float.Parse(commands[1]);
+                            float moveY = float.Parse(commands[2]);
+                            
+
+                            
+
+                        }
+
+
+                    }
+                }
                 Debug.Log("Received: " + receivedString);
             }
 
