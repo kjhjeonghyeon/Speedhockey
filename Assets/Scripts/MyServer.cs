@@ -12,9 +12,9 @@ public class MyServer
     public static MyServer instance = new MyServer();
 
     Socket mainSock;
-    List<Socket> connectedClients = new List<Socket>();
+    //List<Socket> connectedClients = new List<Socket>();
     int m_port = 11000;
-    List<AsyncObject> socketList = new List<AsyncObject>();
+    List<Socket> socketList = new List<Socket>();
     public void Start()
     {
         try
@@ -39,12 +39,19 @@ public class MyServer
             mainSock.Dispose();
         }
 
-        foreach (Socket socket in connectedClients)
+        //foreach (Socket socket in connectedClients)
+        //{
+        //    socket.Close();
+        //    socket.Dispose();
+        //}
+        //connectedClients.Clear();
+
+        foreach (Socket socket in socketList)
         {
             socket.Close();
             socket.Dispose();
         }
-        connectedClients.Clear();
+        socketList.Clear();
 
         //mainSock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.IP);
     }
@@ -70,11 +77,11 @@ public class MyServer
     {
         try
         {
-            AsyncObject obj = new AsyncObject(30);
+            AsyncObject obj = new AsyncObject(300);
 
             Socket client = mainSock.EndAccept(ar);
             obj.WorkingSocket = client;
-            socketList.Add(obj);
+            socketList.Add(client);
             //Socket client = mainSock.EndAccept(ar);
 
 
@@ -102,6 +109,11 @@ public class MyServer
         {
             int bytesRead = obj.WorkingSocket.EndReceive(ar);
 
+            if(socketList[0] == obj.WorkingSocket)
+            {
+                Debug.Log("³ª °°À½");
+            }
+
             if (bytesRead > 0)
             {
                 byte[] receivedData = new byte[bytesRead];
@@ -126,7 +138,7 @@ public class MyServer
     {
         for(int i = 0; i < socketList.Count; i++)
         {
-            socketList[i].WorkingSocket.Send(msg);
+            socketList[i].Send(msg);
         }
         
     }

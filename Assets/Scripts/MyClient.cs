@@ -104,6 +104,8 @@ public class MyClient
         Array.Copy(obj.Buffer, 0, buffer, 0, received);
 
         Debug.Log("client receive : " + Encoding.Default.GetString(buffer));
+
+        mainSock.BeginReceive(obj.Buffer, 0, obj.BufferSize, 0, DataReceived, obj);
     }
     public void Send(byte[] msg)
     {
