@@ -9,6 +9,8 @@ using System;
 
 public class MyServer
 {
+    public static MyServer instance = new MyServer();
+
     Socket mainSock;
     List<Socket> connectedClients = new List<Socket>();
     int m_port = 11000;
@@ -116,6 +118,11 @@ public class MyServer
         {
             Debug.LogError("Error in DataReceived: " + e.Message);
         }
+    }
+
+    public void Send(byte[] msg)
+    {
+        mainSock.Send(msg);
     }
 
 }
