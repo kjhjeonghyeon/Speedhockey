@@ -9,13 +9,14 @@ public class ClientManager : MonoBehaviour
 
     // Start is called before the first frame update
     void Awake()
-    {      
+    {
         //MyClient.instance.Connect();
     }
 
     private void Start()
     {
         MyClient.instance.Connect();
+        //myClient.Connect();
     }
 
     // Update is called once per frame
@@ -25,6 +26,8 @@ public class ClientManager : MonoBehaviour
         {
             byte[] buf = Encoding.Default.GetBytes("Client -> Server");
             MyClient.instance.Send(buf);
+            Debug.Log("Q ´©¸§");
+            //.myClient.Send(buf);
         }
     }
 }

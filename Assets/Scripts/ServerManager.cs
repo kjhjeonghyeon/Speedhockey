@@ -12,7 +12,7 @@ public class ServerManager : MonoBehaviour
     {
 
         MyServer.instance.Start();
-
+        //myServer.Start();
     }
 
     // Update is called once per frame
@@ -22,6 +22,8 @@ public class ServerManager : MonoBehaviour
         {
             byte[] buf = Encoding.Default.GetBytes("Server -> Client");
             MyServer.instance.Send(buf);
+            Debug.Log("W ´©¸§");
+            //myServer.Send(buf);
         }
     }
 }
