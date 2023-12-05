@@ -14,6 +14,7 @@ public class MyServer
     Socket mainSock;
     List<Socket> connectedClients = new List<Socket>();
     int m_port = 11000;
+    List<AsyncObject> socketList = new List<AsyncObject>();
     public void Start()
     {
         try
@@ -29,7 +30,7 @@ public class MyServer
         }
     }
 
-    
+
     public void Close()
     {
         if (mainSock != null)
@@ -73,13 +74,14 @@ public class MyServer
 
             Socket client = mainSock.EndAccept(ar);
             obj.WorkingSocket = client;
+            socketList.Add(obj);
             //Socket client = mainSock.EndAccept(ar);
-            
+
 
             // 다음 데이터 수신 대기
             client.BeginReceive(obj.Buffer, 0, obj.Buffer.Length, 0, DataReceived, obj);
 
-
+            Debug.Log("수락");
             //AsyncObject obj = new AsyncObject(1920 * 1080 * 3);
             //obj.WorkingSocket = client;
             //connectedClients.Add(client);
@@ -122,7 +124,11 @@ public class MyServer
 
     public void Send(byte[] msg)
     {
-        mainSock.Send(msg);
+        for(int i = 0; i < socketList.Count; i++)
+        {
+            socketList[i].WorkingSocket.Send(msg);
+        }
+        
     }
 
 }

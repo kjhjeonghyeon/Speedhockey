@@ -20,7 +20,7 @@ public class ServerManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.W))
         {
-            byte[] buf = Encoding.Default.GetBytes("Server -> Client");
+            byte[] buf = Encoding.UTF8.GetBytes("Server -> Client");
             MyServer.instance.Send(buf);
             Debug.Log("W ´©¸§");
             //myServer.Send(buf);

@@ -74,6 +74,7 @@ public class MyClient
             Array.Clear(Buffer, 0, BufferSize);
         }
     }
+
     void ConnectCallback(IAsyncResult ar)
     {
         try
@@ -83,11 +84,15 @@ public class MyClient
             AsyncObject obj = new AsyncObject(4096);
             obj.WorkingSocket = mainSock;
             mainSock.BeginReceive(obj.Buffer, 0, obj.BufferSize, 0, DataReceived, obj);
+
+            Debug.Log("¿¬°á");
         }
         catch (Exception e)
         {
+            Debug.LogError("Error in accept callback: " + e.Message);
         }
     }
+
     void DataReceived(IAsyncResult ar)
     {
         AsyncObject obj = (AsyncObject)ar.AsyncState;
