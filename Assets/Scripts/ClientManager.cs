@@ -6,11 +6,21 @@ using UnityEngine.UI;
 
 public class ClientManager : MonoBehaviour
 {
+    public static ClientManager instance;  
+
     [SerializeField] GameObject startButton;
+    //bool startPossibility = false;
 
     void Awake()
     {
-        //MyClient.instance.Connect();
+        if(instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(this.gameObject);
+        }
     }
 
     private void Start()
@@ -37,6 +47,16 @@ public class ClientManager : MonoBehaviour
     public void StartButton_SetActive_True()
     {
         startButton.SetActive(true);
+    }
+
+    public void StartButton_Interactable_True()
+    {
+        startButton.GetComponent<Button>().interactable = true;
+    }
+
+    public void StartButton_Interactable_False()
+    {
+        startButton.GetComponent<Button>().interactable = false;
     }
 
     private void OnDestroy()

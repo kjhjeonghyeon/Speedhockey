@@ -97,6 +97,8 @@ public class MyServer
             {
                 room.Add(new Room());
                 room[0].sockets.Add(client);
+
+                Send("NUM:0", 0, 0);
             }
             else
             {
@@ -107,6 +109,17 @@ public class MyServer
                         room[i].sockets.Add(client);
 
                         room[i].sockets[room[i].sockets.Count - 1].Send(Encoding.Default.GetBytes("NUM:" + (room[i].sockets.Count - 1).ToString()));
+
+                        //게임 시작 버튼 활성화 여부
+                        if (room[i].sockets.Count % 2 == 0)
+                        {
+                            Send("START_POSSIBILITY:1", i, 0);
+                        }
+                        else
+                        {
+                            Send("START_POSSIBILITY:0", i, 0);
+                        }
+                        
 
                         break;
                     }
@@ -135,6 +148,8 @@ public class MyServer
     void DataReceived(IAsyncResult ar)
     {
         AsyncObject obj = (AsyncObject)ar.AsyncState;
+
+        Debug.Log("데이터 받음");
 
         try
         {
@@ -183,18 +198,27 @@ public class MyServer
                                 {
                                     changeRoomIndex = i;
                                     break;
-                                }    
+                                }
                             }
 
                             //해당 소켓 연결해제
                             obj.WorkingSocket.Close();
 
                             //삭제된 클라이언트가 있는 룸에 자신의 번호 다시 부여
-                            for(int i=0; i< room[changeRoomIndex].sockets.Count; i++)
+                            for (int i = 0; i < room[changeRoomIndex].sockets.Count; i++)
                             {
                                 room[changeRoomIndex].sockets[i].Send(Encoding.Default.GetBytes("NUM:" + i.ToString()));
                             }
-                            
+
+                            //게임 시작 버튼 활성화 여부
+                            if (room[changeRoomIndex].sockets.Count % 2 == 0)
+                            {
+                                Send("START_POSSIBILITY", changeRoomIndex, 0);
+                            }
+                            else
+                            {
+                                Send("START_POSSIBILITY:0", changeRoomIndex, 0);
+                            }
                         }
                     }
                 }
@@ -203,6 +227,14 @@ public class MyServer
 
             // 다음 데이터 수신 대기
             obj.WorkingSocket.BeginReceive(obj.Buffer, 0, obj.Buffer.Length, 0, DataReceived, obj);
+
+            //현재 룸 상태 출력
+            Debug.Log("==========================");
+            for(int i = 0;i<room.Count;i++)
+            {
+                Debug.Log(i + "번 룸 : " + room[i].sockets.Count + "명, isStart : " + room[i].isStart);
+            }
+            Debug.Log("==========================");
         }
         catch (Exception e)
         {
@@ -216,8 +248,29 @@ public class MyServer
         {
             socketList[i].Send(msg);
         }
-        socketList[0].Send(msg);// 호스트알려주기
     }
+
+    public void Send(string msg)
+    {
+        for (int i = 0; i < socketList.Count; i++)
+        {
+            socketList[i].Send(Encoding.Default.GetBytes(msg));
+        }
+    }
+
+    public void Send(string msg, int roomNum)
+    {
+        for (int i = 0; i < room[roomNum].sockets.Count; i++)
+        {
+            room[roomNum].sockets[i].Send(Encoding.Default.GetBytes(msg));
+        }
+    }
+
+    public void Send(string msg, int roomNum, int socketNum)
+    {
+        room[roomNum].sockets[socketNum].Send(Encoding.Default.GetBytes(msg));
+    }
+
     int GetMyRoomNum(Socket mySocket)
     {
         for (int i = 0; i < room.Count; i++)

@@ -158,10 +158,20 @@ public class MyClient
 
                         if(playerNum == 0)
                         {
-
+                            ClientManager.instance.StartButton_SetActive_True();
                         }
                     }
-                    
+                    else if(commands[0] == "START_POSSIBILITY")
+                    {
+                        if (int.Parse(commands[1]) == 0)
+                        {
+                            ClientManager.instance.StartButton_Interactable_False();
+                        }
+                        else
+                        {
+                            ClientManager.instance.StartButton_Interactable_True();
+                        }
+                    }
                 }
             }
             Debug.Log("Received: " + receivedString);
@@ -179,8 +189,8 @@ public class MyClient
 
     public void Send(byte[] msg)
     {
-        //mainSock.Send(msg);
-        List<byte[]> data = new List<byte[]>();
+        mainSock.Send(msg);
+        //List<byte[]> data = new List<byte[]>();
         //data.Add(standerdPlayerData());
         //data.Add(clientstanderdPlayerData());
         //data.Add(standerdBallData());
