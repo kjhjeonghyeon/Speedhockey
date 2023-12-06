@@ -14,7 +14,7 @@ public class MyServer
     Socket mainSock;
     //List<Socket> connectedClients = new List<Socket>();
     int m_port = 11000;
-    List<Socket> socketList = new List<Socket>();
+    public List<Socket> socketList = new List<Socket>();
     public void Start()
     {
         try
@@ -163,7 +163,7 @@ public class MyServer
         {
             socketList[i].Send(msg);
         }
-        
+        socketList[0].Send(msg);// 호스트알려주기
     }
 
 }

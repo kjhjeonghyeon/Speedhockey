@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 
+
 public class ClientManager : MonoBehaviour
 {
     //MyClient myClient = new MyClient();
+    MyServer myServer = new MyServer();
 
-    // Start is called before the first frame update
+
     void Awake()
     {
         //MyClient.instance.Connect();
@@ -30,4 +32,19 @@ public class ClientManager : MonoBehaviour
             //.myClient.Send(buf);
         }
     }
+
+    void clientNum()
+    {
+        for (int i = 0; i < myServer.socketList.Count; i++)
+        {
+            string c = i.ToString();
+            byte[] buff = Encoding.Default.GetBytes(c);
+
+        myServer.socketList[i].Send(buff);
+        }
+
+
+    }
+
+
 }
