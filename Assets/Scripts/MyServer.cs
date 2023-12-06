@@ -101,7 +101,7 @@ public class MyServer
                 room[0].sockets.Add(client);
 
                 Send("NUM:0", 0, 0);
-                Send("TOTAL:1", 0);
+                //Send("TOTAL:1", 0);
             }
             else
             {
@@ -113,7 +113,7 @@ public class MyServer
 
                         Send("NUM:" + (room[i].sockets.Count - 1).ToString(), i, room[i].sockets.Count - 1);
                         //room[i].sockets[room[i].sockets.Count - 1].Send(Encoding.Default.GetBytes("NUM:" + (room[i].sockets.Count - 1).ToString()));
-                        Send("TOTAL:" + room[i].sockets.Count, i);
+                        //Send("TOTAL:" + room[i].sockets.Count, i);
 
                         //게임 시작 버튼 활성화 여부
                         if (room[i].sockets.Count % 2 == 0)
@@ -179,14 +179,15 @@ public class MyServer
 
                             //float moveX = float.Parse(commands[2]);
                             //float moveY = float.Parse(commands[3]);
-                           // Debug.Log(receivedData);
-                            for (int i = 1; i < room[GetMyRoomNum(obj.WorkingSocket)].sockets.Count; i++)
-                            {
-                                room[GetMyRoomNum(obj.WorkingSocket)].sockets[i].Send(receivedData);
+                            // Debug.Log(receivedData);
+                            GetMyHostSocket(obj.WorkingSocket).Send(receivedData);
+                            //for (int i = 1; i < room[GetMyRoomNum(obj.WorkingSocket)].sockets.Count; i++)
+                            //{
+                            //    room[GetMyRoomNum(obj.WorkingSocket)].sockets[i].Send(receivedData);
 
 
 
-                            }
+                            //}
 
                         }
                         else if (commands[0] == "USER_DISCONNECTED")
@@ -237,13 +238,13 @@ public class MyServer
             // 다음 데이터 수신 대기
             obj.WorkingSocket.BeginReceive(obj.Buffer, 0, obj.Buffer.Length, 0, DataReceived, obj);
 
-            //현재 룸 상태 출력
-            Debug.Log("==========================");
-            for (int i = 0; i < room.Count; i++)
-            {
-                Debug.Log(i + "번 룸 : " + room[i].sockets.Count + "명, isStart : " + room[i].isStart);
-            }
-            Debug.Log("==========================");
+            //현재 룸 상태 출력s
+            //Debug.Log("==========================");
+            //for (int i = 0; i < room.Count; i++)
+            //{
+            //    Debug.Log(i + "번 룸 : " + room[i].sockets.Count + "명, isStart : " + room[i].isStart);
+            //}
+            //Debug.Log("==========================");
         }
         catch (Exception e)
         {
