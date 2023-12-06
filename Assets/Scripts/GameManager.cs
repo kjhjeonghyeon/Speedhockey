@@ -6,11 +6,15 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
-    List<Rigidbody> m_players = new List<Rigidbody>();
-    public Rigidbody[] m_game = new Rigidbody[4];
+    List<Rigidbody> r_players = new List<Rigidbody>();
+
+    public Rigidbody[] r_game = new Rigidbody[4];
+    List<Transform> m_players = new List<Transform>();
+    
+    public Transform[] m_game = new Transform[4];
     Texture color;
     [SerializeField] List<List<Transform>> startPoint;
-
+    int speed = 3;
     private void Awake()
     {
         if(instance == null)
@@ -37,11 +41,28 @@ public class GameManager : MonoBehaviour
 
     }
 
+    public void ToClientSendFromHostMove(int playerNum = -1, float moveX = 0f, float moveY = 0f)
+    {
+        if (playerNum != -1)
+        {
+            //    Vector3 randomPosition = new Vector3();
+
+            //m_players.Add(Instantiate(m_game));
+            //if (m_players.Count %2 == 0)
+            //{//적팀 색만들기
+            //    m_players[m_players.Count / 2].GetComponent<Material>().mainTexture = color;
+
+            //} 
+            r_game[playerNum].velocity = new Vector3(moveX, 0, moveY) *speed ;
+            // Debug.Log("recieve:" + playerNum + moveX + moveX);
+        }
+    }
+
+
     public void ClientMove(int playerNum = -1, float moveX = 0f, float moveY = 0f)
     {
         if (playerNum != -1)
         {
-
             //    Vector3 randomPosition = new Vector3();
 
             //m_players.Add(Instantiate(m_game));
@@ -50,16 +71,8 @@ public class GameManager : MonoBehaviour
             //    m_players[m_players.Count / 2].GetComponent<Material>().mainTexture = color;
 
             //}
-            m_game[playerNum].velocity = new Vector3(moveX, 0, moveY);
-           
-
+            m_game[playerNum].position = new Vector3(moveX, 0, moveY);
             // Debug.Log("recieve:" + playerNum + moveX + moveX);
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 }

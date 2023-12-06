@@ -88,7 +88,7 @@ public class MyServer
     {
         try
         {
-            AsyncObject obj = new AsyncObject(300);
+            AsyncObject obj = new AsyncObject(1024);
 
             Socket client = mainSock.EndAccept(ar);
             obj.WorkingSocket = client;
@@ -176,7 +176,7 @@ public class MyServer
 
                             //float moveX = float.Parse(commands[2]);
                             //float moveY = float.Parse(commands[3]);
-                            Debug.Log(receivedData);
+                           // Debug.Log(receivedData);
                             for (int i = 1; i < room[GetMyRoomNum(obj.WorkingSocket)].sockets.Count; i++)
                             {
                                 room[GetMyRoomNum(obj.WorkingSocket)].sockets[i].Send(receivedData);

@@ -80,7 +80,7 @@ public class MyClient
     PlayerMove playerMove = new PlayerMove();
     //MyData myData = new MyData();
     Socket mainSock;
-    public bool isHost = false;
+  //  public bool isHost = false;
     public int playerNum = -1;
     int m_port = 11000;
     public void Connect()
@@ -165,9 +165,16 @@ public class MyClient
                             int clientNum = int.Parse(commands[1]);
                             float moveX = float.Parse(commands[2]);
                             float moveY = float.Parse(commands[3]);
+                            if (playerNum==0)
+                            {
+                            GameManager.instance.ToClientSendFromHostMove(clientNum, moveX, moveY);
+                            }
+                            else
+                            {
                             GameManager.instance.ClientMove(clientNum, moveX, moveY);
 
-
+                            }
+                            
                         }
                         else if (commands[0] == "NUM")
                         {
