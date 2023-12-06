@@ -6,6 +6,7 @@ using UnityEngine;
 using System.Text;
 using System;
 using System.Globalization;
+using Unity.VisualScripting.Dependencies.Sqlite;
 
 public class Room
 {
@@ -105,9 +106,10 @@ public class MyServer
             }
             else
             {
+                bool successAdd = false;
                 for (int i = 0; i < room.Count; i++)
                 {
-                    if (room[i].sockets.Count < room[i].MaxPlayerNum)
+                    if (room[i].sockets.Count < room[i].MaxPlayerNum && !room[i].isStart)
                     {
                         room[i].sockets.Add(client);
 
@@ -125,10 +127,21 @@ public class MyServer
                             Send("START_POSSIBILITY:0", i, 0);
                         }
 
+                        successAdd = true;
 
                         break;
                     }
                 }
+
+                if (!successAdd)
+                {
+                    room.Add(new Room());
+                    room[room.Count - 1].sockets.Add(client);
+
+                    Send((room[room.Count - 1].sockets.Count - 1).ToString(), room.Count - 1, room[room.Count - 1].sockets.Count - 1);
+                    //Send("TOTAL:" + room[room.Count - 1].sockets.Count, room.Count - 1);
+                }
+
             }
 
 
