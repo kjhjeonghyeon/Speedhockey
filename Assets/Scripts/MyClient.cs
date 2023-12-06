@@ -189,6 +189,10 @@ public class MyClient
                                 ClientManager.instance.StartButton_Interactable_True();
                             }
                         }
+                        else if(commands[0] == "TOTAL")
+                        {
+                            GameManager.instance.PlayerCreate(int.Parse(commands[1]));
+                        }
                     }
                 }
                 Debug.Log("Received: " + receivedString);

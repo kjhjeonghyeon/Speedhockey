@@ -9,6 +9,7 @@ public class PlayerMove : MonoBehaviour
     Vector3 movePosition;
     public int speed = 3;
     Rigidbody rb;
+    int playerNum = -1;
 
     // Start is called before the first frame update
     void Start()
@@ -56,6 +57,12 @@ public class PlayerMove : MonoBehaviour
         }
 
     }
+
+    public void SetPlayerNum(int num)
+    {
+        playerNum = num;
+    }
+
     void HostData()
     {
 
