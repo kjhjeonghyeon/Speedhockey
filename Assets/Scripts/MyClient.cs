@@ -80,7 +80,7 @@ public class MyClient
     PlayerMove playerMove = new PlayerMove();
     //MyData myData = new MyData();
     Socket mainSock;
-  //  public bool isHost = false;
+    //  public bool isHost = false;
     public int playerNum = -1;
     int m_port = 11000;
     public void Connect()
