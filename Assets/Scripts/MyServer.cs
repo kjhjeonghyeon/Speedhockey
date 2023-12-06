@@ -189,13 +189,14 @@ public class MyServer
                                 //for (int i = 1; i < room[GetMyRoomNum(obj.WorkingSocket)].sockets.Count; i++)
                                 //{
                                 //    room[GetMyRoomNum(obj.WorkingSocket)].sockets[i].Send(receivedData);
-
-
-
                                 //}
-
                             }
                             else if (commands[0] == "BALL_POSITION")
+                            {
+                                //host한텐 안보내도 되지만 걍 보내자(보내도 처리X)
+                                Send(receivedString, GetMyRoomNum(obj.WorkingSocket));
+                            }
+                            else if (commands[0] == "PLAYER_POSITION")
                             {
                                 //host한텐 안보내도 되지만 걍 보내자(보내도 처리X)
                                 Send(receivedString, GetMyRoomNum(obj.WorkingSocket));

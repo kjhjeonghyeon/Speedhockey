@@ -189,16 +189,27 @@ public class MyClient
                                     ClientManager.instance.StartButton_SetActive_True();
                                 }
                             }
-                            else if (commands[0] == "BALL_POSITION")
+                            else if (commands[0] == "BALL_POSITION" && MyClient.instance.playerNum != 0)
                             {
                                 float posX = float.Parse(commands[1]);
                                 float posY = float.Parse(commands[2]);
                                 float posZ = float.Parse(commands[3]);
 
-                                if (MyClient.instance.playerNum != 0)
-                                {
-                                    GameManager.instance.t_ball.position = new Vector3(posX, posY, posZ);
-                                }
+                               
+                                GameManager.instance.t_ball.position = new Vector3(posX, posY, posZ);
+                               
+
+                            }
+                            else if (commands[0] == "PLAYER_POSITION" && MyClient.instance.playerNum != 0)
+                            {
+                                int player_num = int.Parse(commands[1]);
+                                float posX = float.Parse(commands[2]);
+                                float posY = float.Parse(commands[3]);
+                                float posZ = float.Parse(commands[4]);
+
+
+                                GameManager.instance.t_game[player_num].position = new Vector3(posX, posY, posZ);
+                                
 
                             }
                             //else if (commands[0] == "START_POSSIBILITY")

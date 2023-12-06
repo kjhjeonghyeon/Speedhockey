@@ -7,7 +7,7 @@ using UnityEngine;
 public class PlayerMove : MonoBehaviour
 {
     Vector3 movePosition;
-    public int speed = 3;
+    public int speed = 7;
     Rigidbody rb;
     int playerNum;
 
@@ -73,13 +73,17 @@ public class PlayerMove : MonoBehaviour
     public void DataSend()
     {
         //공 데이터 보내기
-        //입력및 출력
-        byte[] buf = Encoding.Default.GetBytes("BALL_POSITION:" + GameManager.instance.t_ball.position.x+ ":" + GameManager.instance.t_ball.position.y + ":" + GameManager.instance.t_ball.position.z+";");
-        //MyClient.client.GetStream().Write(buf, 0, buf.Length);
-        //MyClient.client.GetStream().Flush();
-        MyClient.instance.Send(buf);
+        byte[] buf1 = Encoding.Default.GetBytes("BALL_POSITION:" + GameManager.instance.t_ball.position.x+ ":" + GameManager.instance.t_ball.position.y + ":" + GameManager.instance.t_ball.position.z+";");
+        MyClient.instance.Send(buf1);
 
         //플레이어 데이터 보내기
+        for (int i = 0; i < GameManager.instance.t_game.Length; i++)
+        {
+            string command;
+            Vector3 pos = GameManager.instance.t_game[i].position;
+            command = "PLAYER_POSITION:"+ i + ":" + pos.x + ":" + pos.y + ":" + pos.z;
+            MyClient.instance.Send(command);
+        }
     }
 
     public void SetPlayerNum(int num)
