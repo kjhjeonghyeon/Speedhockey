@@ -137,13 +137,41 @@ public class MyClient
     {
         AsyncObject obj = (AsyncObject)ar.AsyncState;
 
-        int received = obj.WorkingSocket.EndReceive(ar);
+        int bytesRead = obj.WorkingSocket.EndReceive(ar);
 
-        byte[] buffer = new byte[received];
+        if (bytesRead > 0)
+        {
+            byte[] receivedData = new byte[bytesRead];
+            Array.Copy(obj.Buffer, 0, receivedData, 0, bytesRead);
 
-        Array.Copy(obj.Buffer, 0, buffer, 0, received);
+            // 여기서 receivedData를 활용하여 필요한 작업 수행
+            // 예시: 문자열로 변환하여 출력
+            string receivedString = Encoding.Default.GetString(receivedData);
+            if (receivedString != "")
+            {
+                string[] commands = receivedString.Split(":");
+                if (commands.Length > 0)
+                {
+                    if (commands[0] == "NUM")
+                    {
+                        playerNum = int.Parse(commands[1]);
 
-        Debug.Log("client receive : " + Encoding.Default.GetString(buffer));
+                        if(playerNum == 0)
+                        {
+
+                        }
+                    }
+                    
+                }
+            }
+            Debug.Log("Received: " + receivedString);
+        }
+
+        //byte[] buffer = new byte[received];
+
+        //Array.Copy(obj.Buffer, 0, buffer, 0, received);
+
+        //Debug.Log("client receive : " + Encoding.Default.GetString(buffer));
 
         mainSock.BeginReceive(obj.Buffer, 0, obj.BufferSize, 0, DataReceived, obj);
     }

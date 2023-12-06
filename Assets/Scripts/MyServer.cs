@@ -21,7 +21,6 @@ public class MyServer
     //List<Socket> connectedClients = new List<Socket>();
     int m_port = 11000;
     public List<Socket> socketList = new List<Socket>();
-
     public List<Room> room = new List<Room>();
     //int roomCount = 0;
 
@@ -107,10 +106,7 @@ public class MyServer
                     {
                         room[i].sockets.Add(client);
 
-                        if (room[i].sockets.Count == 1)
-                        {
-                            room[i].sockets[0].Send(Encoding.Default.GetBytes("HOST:"));
-                        }
+                        room[i].sockets[room[i].sockets.Count - 1].Send(Encoding.Default.GetBytes("NUM:" + (room[i].sockets.Count - 1).ToString()));
 
                         break;
                     }
@@ -174,6 +170,32 @@ public class MyServer
 
 
                         }
+                        else if (commands[0] == "USER_DISCONNECTED")
+                        {
+                            //소켓리스트에서 연결해제된 소켓 삭제
+                            socketList.Remove(obj.WorkingSocket);
+
+                            //룸리스트에서 연결해제된 소켓 삭제
+                            int changeRoomIndex = 0;
+                            for (int i = 0; i < room.Count; i++)
+                            {
+                                if (room[i].sockets.Remove(obj.WorkingSocket))
+                                {
+                                    changeRoomIndex = i;
+                                    break;
+                                }    
+                            }
+
+                            //해당 소켓 연결해제
+                            obj.WorkingSocket.Close();
+
+                            //삭제된 클라이언트가 있는 룸에 자신의 번호 다시 부여
+                            for(int i=0; i< room[changeRoomIndex].sockets.Count; i++)
+                            {
+                                room[changeRoomIndex].sockets[i].Send(Encoding.Default.GetBytes("NUM:" + i.ToString()));
+                            }
+                            
+                        }
                     }
                 }
                 Debug.Log("Received: " + receivedString);
@@ -205,7 +227,7 @@ public class MyServer
 
             }
         }
-        int a=0;
+        int a = 0;
         return a;
     }
 }
