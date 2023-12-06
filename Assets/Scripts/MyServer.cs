@@ -9,6 +9,7 @@ using System;
 public class Room
 {
     public bool isStart = false;
+    public int MaxPlayerNum = 4;
     public List<Socket> sockets = new List<Socket>();
 }
 
@@ -22,7 +23,7 @@ public class MyServer
     public List<Socket> socketList = new List<Socket>();
 
     public List<Room> room = new List<Room>();
-
+    //int roomCount = 0;
 
     public void Start()
     {
@@ -31,7 +32,7 @@ public class MyServer
             mainSock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             IPEndPoint serverEP = new IPEndPoint(IPAddress.Any, m_port);
             mainSock.Bind(serverEP);
-            mainSock.Listen(10);
+            mainSock.Listen(50);
             mainSock.BeginAccept(AcceptCallback, null);
         }
         catch (Exception e)
@@ -86,13 +87,35 @@ public class MyServer
     {
         try
         {
-            AsyncObject obj = new AsyncObject(30);
+            AsyncObject obj = new AsyncObject(300);
 
             Socket client = mainSock.EndAccept(ar);
             obj.WorkingSocket = client;
             socketList.Add(client);
-            //Socket client = mainSock.EndAccept(ar);
 
+            //게임 방에 들어오는 순서대로 배치
+            if (room.Count <= 0)
+            {
+                room.Add(new Room());
+                room[0].sockets.Add(client);
+            }
+            else
+            {
+                for (int i = 0; i < room.Count; i++)
+                {
+                    if (room[i].sockets.Count < room[i].MaxPlayerNum)
+                    {
+                        room[i].sockets.Add(client);
+
+                        if (room[i].sockets.Count == 1)
+                        {
+                            room[i].sockets[0].Send(Encoding.Default.GetBytes("HOST:"));
+                        }
+
+                        break;
+                    }
+                }
+            }
 
 
             // 다음 데이터 수신 대기
@@ -116,8 +139,6 @@ public class MyServer
     void DataReceived(IAsyncResult ar)
     {
         AsyncObject obj = (AsyncObject)ar.AsyncState;
-
-        Debug.Log("다타 리시브");
 
         try
         {
@@ -166,7 +187,7 @@ public class MyServer
 
     public void Send(byte[] msg)
     {
-        for(int i = 0; i < socketList.Count; i++)
+        for (int i = 0; i < socketList.Count; i++)
         {
             socketList[i].Send(msg);
         }
