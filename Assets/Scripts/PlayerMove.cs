@@ -66,6 +66,12 @@ public class PlayerMove : MonoBehaviour
         }
 
     }
+
+    public void SetPlayerNum(int num)
+    {
+        playerNum = num;
+    }
+
     void HostData()
     {
 
