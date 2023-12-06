@@ -16,14 +16,14 @@ public class GameManager : MonoBehaviour
     public GameObject[] player;
     [SerializeField] GameObject PlayerPrefab_Red;
     [SerializeField] GameObject PlayerPrefab_Blue;
-    List<Rigidbody> m_players = new List<Rigidbody>();
-    public Rigidbody[] m_game = new Rigidbody[4];
-    List<Rigidbody> r_players = new List<Rigidbody>();
+    //   List<Rigidbody> m_players = new List<Rigidbody>();
+    //  public Rigidbody[] m_game = new Rigidbody[4];
 
+    List<Rigidbody> r_players = new List<Rigidbody>();
     public Rigidbody[] r_game = new Rigidbody[4];
-    List<Transform> m_players = new List<Transform>();
-    
-    public Transform[] m_game = new Transform[4];
+
+    List<Transform> t_players = new List<Transform>();
+    public Transform[] t_game = new Transform[4];
     Texture color;
     [SerializeField] StartPoint[] startPoints_Red;
     [SerializeField] StartPoint[] startPoints_Blue;
@@ -47,12 +47,12 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        for (int i = 0; i < m_game.Length; i++)
-        {
-            m_players.Add(m_game[i]);
+        //for (int i = 0; i < t_game.Length; i++)
+        //{
+        //    t_players.Add(r_game[i]);
 
 
-        }
+        //}
 
         Screen.SetResolution(960, 540, false);
 
@@ -92,7 +92,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void ClientMove(int playerNum = -1, float moveX = 0f, float moveY = 0f)
+
     public void ToClientSendFromHostMove(int playerNum = -1, float moveX = 0f, float moveY = 0f)
     {
         if (playerNum != -1)
@@ -105,11 +105,9 @@ public class GameManager : MonoBehaviour
             //    m_players[m_players.Count / 2].GetComponent<Material>().mainTexture = color;
 
             //}
-            m_game[playerNum].velocity = new Vector3(moveX, 0, moveY);
-
 
             //} 
-            r_game[playerNum].velocity = new Vector3(moveX, 0, moveY) *speed ;
+            r_game[playerNum].velocity = new Vector3(moveX, 0, moveY) * speed;
             // Debug.Log("recieve:" + playerNum + moveX + moveX);
         }
     }
@@ -127,7 +125,7 @@ public class GameManager : MonoBehaviour
             //    m_players[m_players.Count / 2].GetComponent<Material>().mainTexture = color;
 
             //}
-            m_game[playerNum].position = new Vector3(moveX, 0, moveY);
+            t_game[playerNum].position = new Vector3(moveX, 0, moveY);
             // Debug.Log("recieve:" + playerNum + moveX + moveX);
         }
     }
