@@ -37,7 +37,7 @@ public class ClientManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            byte[] buf = Encoding.Default.GetBytes("Client -> Server asdasdasdasdasdasdasdasasd");
+            byte[] buf = Encoding.Default.GetBytes("Client -> Server asdasdasdasdasdasdasdasasd;");
             MyClient.instance.Send(buf);
             Debug.Log("Q ´©¸§");
             //.myClient.Send(buf);

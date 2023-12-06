@@ -22,7 +22,7 @@ public class PlayerMove : MonoBehaviour
     {
         InputMove();
 
-        Debug.Log(rb.velocity);
+        //Debug.Log(rb.velocity);
 
         DataSend();
 
@@ -33,7 +33,7 @@ public class PlayerMove : MonoBehaviour
         float mouse_X = Input.GetAxis("Mouse X");
         float mouse_Y = Input.GetAxis("Mouse Y");
 
-        if ( MyClient.instance != null)
+        if ((mouse_X != 0 || mouse_Y != 0) && MyClient.instance != null)
         {
             //Debug.Log(MyClient.client + " " + MyClient.client.Connected);
             movePosition = new Vector3(mouse_X, 0, mouse_Y);
@@ -55,7 +55,7 @@ public class PlayerMove : MonoBehaviour
                 else
                 {
                     //입력및 출력
-                    byte[] buf = Encoding.Default.GetBytes("MOVE:" + MyClient.instance.playerNum + ":" + mouse_X + ":" + mouse_Y + ":");
+                    byte[] buf = Encoding.Default.GetBytes("MOVE:" + MyClient.instance.playerNum + ":" + mouse_X + ":" + mouse_Y + ";");
                     //MyClient.client.GetStream().Write(buf, 0, buf.Length);
                     //MyClient.client.GetStream().Flush();
                     MyClient.instance.Send(buf);
@@ -74,7 +74,7 @@ public class PlayerMove : MonoBehaviour
     {
         //공 데이터 보내기
         //입력및 출력
-        byte[] buf = Encoding.Default.GetBytes("BALL_POSITION:" + GameManager.instance.t_ball.position.x);
+        byte[] buf = Encoding.Default.GetBytes("BALL_POSITION:" + GameManager.instance.t_ball.position.x+ ":" + GameManager.instance.t_ball.position.y + ":" + GameManager.instance.t_ball.position.z+";");
         //MyClient.client.GetStream().Write(buf, 0, buf.Length);
         //MyClient.client.GetStream().Flush();
         MyClient.instance.Send(buf);

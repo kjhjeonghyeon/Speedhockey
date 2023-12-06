@@ -5,8 +5,6 @@ using System.Net;
 using UnityEngine;
 using System.Text;
 using System;
-using System.Globalization;
-using Unity.VisualScripting.Dependencies.Sqlite;
 
 public class Room
 {
@@ -128,7 +126,7 @@ public class MyServer
                 room.Add(new Room());
                 room[room.Count - 1].sockets.Add(client);
 
-                Send((room[room.Count - 1].sockets.Count - 1).ToString(), room.Count - 1, room[room.Count - 1].sockets.Count - 1);
+                Send("NUM:"+(room[room.Count - 1].sockets.Count - 1).ToString(), room.Count - 1, room[room.Count - 1].sockets.Count - 1);
                 //Send("TOTAL:" + room[room.Count - 1].sockets.Count, room.Count - 1);
             }
 
@@ -167,73 +165,87 @@ public class MyServer
 
                 // 여기서 receivedData를 활용하여 필요한 작업 수행
                 // 예시: 문자열로 변환하여 출력
-                string receivedString = Encoding.Default.GetString(receivedData);
-                if (receivedString != "")
+                string[] split_receivedData = Encoding.Default.GetString(receivedData).Split(";");
+
+                for (int iter = 0; iter < split_receivedData.Length - 1; iter++)
                 {
-                    string[] commands = receivedString.Split(":");
-                    if (commands.Length > 0)
+                    string receivedString = split_receivedData[iter];
+                    if (receivedString != "")
                     {
-                        if (commands[0] == "MOVE")
+
+
+                        string[] commands = receivedString.Split(":");
+                        if (commands.Length > 0)
                         {
-                            //Debug.Log("만든 함수 확인1:" + GetMyRoomNum(obj.WorkingSocket)/* + "만든 함수 확인2: "+ GetMyHostSocket(obj.WorkingSocket)*/);
-                            //GetMyHostSocket(obj.WorkingSocket).Send(receivedData);
-
-                            //float moveX = float.Parse(commands[2]);
-                            //float moveY = float.Parse(commands[3]);
-                            // Debug.Log(receivedData);
-                            GetMyHostSocket(obj.WorkingSocket).Send(receivedData);
-                            //for (int i = 1; i < room[GetMyRoomNum(obj.WorkingSocket)].sockets.Count; i++)
-                            //{
-                            //    room[GetMyRoomNum(obj.WorkingSocket)].sockets[i].Send(receivedData);
-
-
-
-                            //}
-
-                        }
-                        else if (commands[0] == "USER_DISCONNECTED")
-                        {
-                            //소켓리스트에서 연결해제된 소켓 삭제
-                            socketList.Remove(obj.WorkingSocket);
-
-                            //룸리스트에서 연결해제된 소켓 삭제
-                            int changeRoomIndex = 0;
-                            for (int i = 0; i < room.Count; i++)
+                            if (commands[0] == "MOVE")
                             {
-                                if (room[i].sockets.Remove(obj.WorkingSocket))
+                                //Debug.Log("만든 함수 확인1:" + GetMyRoomNum(obj.WorkingSocket)/* + "만든 함수 확인2: "+ GetMyHostSocket(obj.WorkingSocket)*/);
+                                //GetMyHostSocket(obj.WorkingSocket).Send(receivedData);
+
+                                //float moveX = float.Parse(commands[2]);
+                                //float moveY = float.Parse(commands[3]);
+                                // Debug.Log(receivedData);
+                                GetMyHostSocket(obj.WorkingSocket).Send(receivedData);
+                                //for (int i = 1; i < room[GetMyRoomNum(obj.WorkingSocket)].sockets.Count; i++)
+                                //{
+                                //    room[GetMyRoomNum(obj.WorkingSocket)].sockets[i].Send(receivedData);
+
+
+
+                                //}
+
+                            }
+                            else if (commands[0] == "BALL_POSITION")
+                            {
+                                //host한텐 안보내도 되지만 걍 보내자(보내도 처리X)
+                                Send(receivedString, GetMyRoomNum(obj.WorkingSocket));
+                            }
+                            else if (commands[0] == "USER_DISCONNECTED")
+                            {
+                                //소켓리스트에서 연결해제된 소켓 삭제
+                                socketList.Remove(obj.WorkingSocket);
+
+                                //룸리스트에서 연결해제된 소켓 삭제
+                                int changeRoomIndex = 0;
+                                for (int i = 0; i < room.Count; i++)
                                 {
-                                    changeRoomIndex = i;
-                                    break;
+                                    if (room[i].sockets.Remove(obj.WorkingSocket))
+                                    {
+                                        changeRoomIndex = i;
+                                        break;
+                                    }
+                                }
+
+                                //해당 소켓 연결해제
+                                obj.WorkingSocket.Close();
+
+                                //삭제된 클라이언트가 있는 룸에 자신의 번호 다시 부여
+                                for (int i = 0; i < room[changeRoomIndex].sockets.Count; i++)
+                                {
+                                    Send("NUM:" + i.ToString(), changeRoomIndex, i);
+                                    //room[changeRoomIndex].sockets[i].Send(Encoding.Default.GetBytes("NUM:" + i.ToString()));
+                                    Send("TOTAL:" + room[changeRoomIndex].sockets.Count, changeRoomIndex);
+                                }
+
+                                //게임 시작 버튼 활성화 여부
+                                if (room[changeRoomIndex].sockets.Count % 2 == 0)
+                                {
+                                    Send("START_POSSIBILITY", changeRoomIndex, 0);
+                                }
+                                else
+                                {
+                                    Send("START_POSSIBILITY:0", changeRoomIndex, 0);
                                 }
                             }
 
-                            //해당 소켓 연결해제
-                            obj.WorkingSocket.Close();
 
-                            //삭제된 클라이언트가 있는 룸에 자신의 번호 다시 부여
-                            for (int i = 0; i < room[changeRoomIndex].sockets.Count; i++)
-                            {
-                                Send("NUM:" + i.ToString(), changeRoomIndex, i);
-                                //room[changeRoomIndex].sockets[i].Send(Encoding.Default.GetBytes("NUM:" + i.ToString()));
-                                Send("TOTAL:" + room[changeRoomIndex].sockets.Count, changeRoomIndex);
-                            }
 
-                            //게임 시작 버튼 활성화 여부
-                            if (room[changeRoomIndex].sockets.Count % 2 == 0)
-                            {
-                                Send("START_POSSIBILITY", changeRoomIndex, 0);
-                            }
-                            else
-                            {
-                                Send("START_POSSIBILITY:0", changeRoomIndex, 0);
-                            }
                         }
-
-
-
                     }
+                    //Debug.Log("Received: " + receivedString);
                 }
-                //   Debug.Log("Received: " + receivedString);
+
+
             }
 
             // 다음 데이터 수신 대기
@@ -265,7 +277,7 @@ public class MyServer
     {
         for (int i = 0; i < socketList.Count; i++)
         {
-            socketList[i].Send(Encoding.Default.GetBytes(msg));
+            socketList[i].Send(Encoding.Default.GetBytes(msg+";"));
         }
     }
 
@@ -273,13 +285,13 @@ public class MyServer
     {
         for (int i = 0; i < room[roomNum].sockets.Count; i++)
         {
-            room[roomNum].sockets[i].Send(Encoding.Default.GetBytes(msg));
+            room[roomNum].sockets[i].Send(Encoding.Default.GetBytes(msg + ";"));
         }
     }
 
     public void Send(string msg, int roomNum, int socketNum)
     {
-        room[roomNum].sockets[socketNum].Send(Encoding.Default.GetBytes(msg));
+        room[roomNum].sockets[socketNum].Send(Encoding.Default.GetBytes(msg + ";"));
     }
 
     int GetMyRoomNum(Socket mySocket)

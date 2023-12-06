@@ -154,56 +154,75 @@ public class MyClient
 
                 // 여기서 receivedData를 활용하여 필요한 작업 수행
                 // 예시: 문자열로 변환하여 출력
-                string receivedString = Encoding.Default.GetString(receivedData);
-				if (receivedString != "")
-				{
-					string[] commands = receivedString.Split(":");
-					if (commands.Length > 0)
-					{
-						if (commands[0] == "MOVE")
-						{
-							int clientNum = int.Parse(commands[1]);
-							float moveX = float.Parse(commands[2]);
-							float moveY = float.Parse(commands[3]);
-							if (playerNum == 0)
-							{
-								GameManager.instance.ToClientSendFromHostMove(clientNum, moveX, moveY);
-							}
-							//else
-							//{
-							//	GameManager.instance.ClientMove(clientNum, moveX, moveY);
+                string[] split_receivedData = Encoding.Default.GetString(receivedData).Split(";");
+                for (int iter = 0; iter < split_receivedData.Length - 1; iter++)
+                {
+                    string receivedString = split_receivedData[iter];
+                    if (receivedString != "")
+                    {
+                        string[] commands = receivedString.Split(":");
+                        if (commands.Length > 0)
+                        {
+                            if (commands[0] == "MOVE")
+                            {
+                                int clientNum = int.Parse(commands[1]);
+                                float moveX = float.Parse(commands[2]);
+                                float moveY = float.Parse(commands[3]);
+                                if (playerNum == 0)
+                                {
+                                    GameManager.instance.ToClientSendFromHostMove(clientNum, moveX, moveY);
+                                }
+                                //else
+                                //{
+                                //	GameManager.instance.ClientMove(clientNum, moveX, moveY);
 
-							//}
+                                //}
 
-						}
-						else if (commands[0] == "NUM")
-						{
-							Debug.Log(receivedString);
-							playerNum = int.Parse(commands[1]);
+                            }
+                            else if (commands[0] == "NUM")
+                            {
+                                Debug.Log(receivedString + " NUM 초기화");
+                                playerNum = int.Parse(commands[1]);
 
-							if (playerNum == 0)
-							{
-								ClientManager.instance.StartButton_SetActive_True();
-							}
-						}
-						//else if (commands[0] == "START_POSSIBILITY")
-						//{
-						//	if (int.Parse(commands[1]) == 0)
-						//	{
-						//		ClientManager.instance.StartButton_Interactable_False();
-						//	}
-						//	else
-						//	{
-						//		ClientManager.instance.StartButton_Interactable_True();
-						//	}
-						//}
-						//else if (commands[0] == "TOTAL")
-						//{
-						//	GameManager.instance.PlayerCreate(int.Parse(commands[1]));
-						//}
-					}
-				}
-				Debug.Log("Received: " + receivedString);
+                                if (playerNum == 0)
+                                {
+                                    ClientManager.instance.StartButton_SetActive_True();
+                                }
+                            }
+                            else if (commands[0] == "BALL_POSITION")
+                            {
+                                float posX = float.Parse(commands[1]);
+                                float posY = float.Parse(commands[2]);
+                                float posZ = float.Parse(commands[3]);
+
+                                if (MyClient.instance.playerNum != 0)
+                                {
+                                    GameManager.instance.t_ball.position = new Vector3(posX, posY, posZ);
+                                }
+
+                            }
+                            //else if (commands[0] == "START_POSSIBILITY")
+                            //{
+                            //	if (int.Parse(commands[1]) == 0)
+                            //	{
+                            //		ClientManager.instance.StartButton_Interactable_False();
+                            //	}
+                            //	else
+                            //	{
+                            //		ClientManager.instance.StartButton_Interactable_True();
+                            //	}
+                            //}
+                            //else if (commands[0] == "TOTAL")
+                            //{
+                            //	GameManager.instance.PlayerCreate(int.Parse(commands[1]));
+                            //}
+                        }
+                    }
+                    //Debug.Log("Received: " + receivedString);
+
+                }
+
+
             }
 
             // 다음 데이터 수신 대기
@@ -235,7 +254,7 @@ public class MyClient
 
     public void Send(string msg)
     {
-        mainSock.Send(Encoding.Default.GetBytes(msg));
+        mainSock.Send(Encoding.Default.GetBytes(msg+";"));
         
     }
 
