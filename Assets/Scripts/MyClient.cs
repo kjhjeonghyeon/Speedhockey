@@ -173,15 +173,26 @@ public class MyClient
                         {
                             playerNum = int.Parse(commands[1]);
 
-                            if (playerNum == 0)
-                            {
-
-                            }
+                        if(playerNum == 0)
+                        {
+                            ClientManager.instance.StartButton_SetActive_True();
+                        }
+                    }
+                    else if(commands[0] == "START_POSSIBILITY")
+                    {
+                        if (int.Parse(commands[1]) == 0)
+                        {
+                            ClientManager.instance.StartButton_Interactable_False();
+                        }
+                        else
+                        {
+                            ClientManager.instance.StartButton_Interactable_True();
                         }
                     }
                 }
-                Debug.Log("Received: " + receivedString);
             }
+            Debug.Log("Received: " + receivedString);
+        }
 
             // 다음 데이터 수신 대기
             obj.WorkingSocket.BeginReceive(obj.Buffer, 0, obj.Buffer.Length, 0, DataReceived, obj);
