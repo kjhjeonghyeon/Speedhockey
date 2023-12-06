@@ -5,6 +5,7 @@ using System.Net;
 using UnityEngine;
 using System.Text;
 using System;
+using System.Globalization;
 
 public class Room
 {
@@ -26,6 +27,7 @@ public class MyServer
 
     public void Start()
     {
+        
         try
         {
             mainSock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -117,21 +119,9 @@ public class MyServer
     {
         AsyncObject obj = (AsyncObject)ar.AsyncState;
 
-        Debug.Log("다타 리시브");
-
         try
         {
             int bytesRead = obj.WorkingSocket.EndReceive(ar);
-
-            if (socketList[0] == obj.WorkingSocket)
-            {
-                Debug.Log("나 같음");
-            }
-            else
-            {
-                Debug.Log("나 다름");
-            }
-
             if (bytesRead > 0)
             {
                 byte[] receivedData = new byte[bytesRead];
@@ -145,12 +135,14 @@ public class MyServer
                     string[] commands = receivedString.Split(":");
                     if (commands.Length > 0)
                     {
-                        if (commands[0] == "Move")
+                        if (commands[0] == "MOVE")
                         {
+                            Debug.Log("만든 함수 확인1:" + GetMyRoomNum(obj.WorkingSocket)/* + "만든 함수 확인2: "+ GetMyHostSocket(obj.WorkingSocket)*/);
+                            GetMyHostSocket(obj.WorkingSocket).Send(receivedData);
 
-                            float moveX = float.Parse(commands[1]);
-                            float moveY = float.Parse(commands[2]);
-
+                            //float moveX = float.Parse(commands[2]);
+                            //float moveY = float.Parse(commands[3]);
+                            Debug.Log(receivedData);
 
                         }
                     }
@@ -181,12 +173,24 @@ public class MyServer
         {
             for (int j = 0; j < room[i].sockets.Count; j++)
             {
-
+                if(room[i].sockets[j] == mySocket)
+                {
+                    return i;
+                }
+                
             }
         }
-        int a=0;
-        return a;
+        return -1;
     }
+    Socket GetMyHostSocket(Socket mySocket)
+    {
+      if(GetMyRoomNum(mySocket) != -1)
+        return room[GetMyRoomNum(mySocket)].sockets[0];
+      else
+        return null;
+       
+    }
+
 }
 
 

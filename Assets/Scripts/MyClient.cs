@@ -145,14 +145,52 @@ public class MyClient
 
         Debug.Log("client receive : " + Encoding.Default.GetString(buffer));
 
+
+        try
+        {
+            int bytesRead = obj.WorkingSocket.EndReceive(ar);
+            if (bytesRead > 0)
+            {
+                byte[] receivedData = new byte[bytesRead];
+                Array.Copy(obj.Buffer, 0, receivedData, 0, bytesRead);
+
+                // 여기서 receivedData를 활용하여 필요한 작업 수행
+                // 예시: 문자열로 변환하여 출력
+                string receivedString = Encoding.Default.GetString(receivedData);
+                if (receivedString != "")
+                {
+                    string[] commands = receivedString.Split(":");
+                    if (commands.Length > 0)
+                    {
+                        if (commands[0] == "Move")
+                        {
+                            int clientNum = int.Parse(commands[1]);
+                            float moveX = float.Parse(commands[2]);
+                            float moveY = float.Parse(commands[3]);
+                            Debug.Log("recieve:" + clientNum + moveX + moveX);
+
+                        }
+                    }
+                }
+                Debug.Log("Received: " + receivedString);
+            }
+
+            // 다음 데이터 수신 대기
+            obj.WorkingSocket.BeginReceive(obj.Buffer, 0, obj.Buffer.Length, 0, DataReceived, obj);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError("Error in DataReceived: " + e.Message);
+        }
+
         mainSock.BeginReceive(obj.Buffer, 0, obj.BufferSize, 0, DataReceived, obj);
     }
 
 
     public void Send(byte[] msg)
     {
-        //mainSock.Send(msg);
-        List<byte[]> data = new List<byte[]>();
+        mainSock.Send(msg);
+        //List<byte[]> data = new List<byte[]>();
         //data.Add(standerdPlayerData());
         //data.Add(clientstanderdPlayerData());
         //data.Add(standerdBallData());

@@ -40,6 +40,7 @@ public class PlayerMove : MonoBehaviour
             {
                 if (!MyClient.instance.isHost)
                 {
+                    Debug.Log("호스트아님!");
                     //입력및 출력
                     byte[] buf = Encoding.Default.GetBytes("MOVE:"+MyClient.instance.playerNum+":" + mouse_X + ":" + mouse_Y);
                     //MyClient.client.GetStream().Write(buf, 0, buf.Length);
