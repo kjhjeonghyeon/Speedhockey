@@ -26,4 +26,9 @@ public class ServerManager : MonoBehaviour
             //myServer.Send(buf);
         }
     }
+
+	private void OnDestroy()
+	{
+        MyServer.instance.Close();
+	}
 }

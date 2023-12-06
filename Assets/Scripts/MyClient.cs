@@ -4,8 +4,45 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using Unity.VisualScripting;
 using UnityEngine;
+public class MyData
+{
+    public List<string> standerdBall = new List<string>();
 
+    public byte[] standerdPlayerData(Vector3 standerdPosition)
+    {
+        string positon = standerdPosition.ToString();
+        //string positon = JsonUtility.ToJson(standerdPosition);
+        byte[] buf = Encoding.Default.GetBytes(positon);
+
+        return buf;
+    }
+    public byte[] clientstanderdPlayerData(Vector3 standerdPosition)
+    {
+        //string positon = JsonUtility.ToJson(standerdPosition);
+        string positon = standerdPosition.ToString();
+        byte[] buf = Encoding.Default.GetBytes(positon);
+
+        return buf;
+    }
+    public byte[] standerdBallData(Vector3 standerdPosition, Quaternion standerdRotate)
+    {
+
+        string positon = standerdRotate.ToString();
+        //string positon = JsonUtility.ToJson(standerdPosition);
+        string rotate = JsonUtility.ToJson(standerdPosition);
+
+        standerdBall.Add(positon);
+        standerdBall.Add(rotate);
+        string transfromData = JsonUtility.ToJson(standerdBall);
+
+        byte[] buf = Encoding.Default.GetBytes(transfromData);
+        return buf;
+    }
+
+
+}
 public class MyClient
 {
     //public static TcpClient client;
@@ -40,7 +77,8 @@ public class MyClient
 
 
     public static MyClient instance = new MyClient();
-
+    PlayerMove playerMove = new PlayerMove();
+    MyData myData = new MyData();
     Socket mainSock;
     int m_port = 11000;
     public void Connect()
@@ -107,9 +145,38 @@ public class MyClient
 
         mainSock.BeginReceive(obj.Buffer, 0, obj.BufferSize, 0, DataReceived, obj);
     }
+
+
     public void Send(byte[] msg)
     {
-        mainSock.Send(msg);
-    }
+        //mainSock.Send(msg);
+        List<byte[]> data = new List<byte[]>();
+        data.Add(standerdPlayerData());
+        data.Add(clientstanderdPlayerData());
+        data.Add(standerdBallData());
 
+
+        mainSock.Send(data[0]);
+        mainSock.Send(data[1]);
+        mainSock.Send(data[2]);
+
+    }
+    byte[] standerdPlayerData()
+    {
+
+        Vector3 position = GameObject.FindGameObjectWithTag("RedPlayer").GetComponent<Transform>().position;
+
+        return myData.standerdPlayerData(position);
+    }
+    byte[] clientstanderdPlayerData()
+    {
+        Vector3 position = GameObject.FindGameObjectWithTag("BluePlayer").GetComponent<Transform>().position;
+        return myData.clientstanderdPlayerData(position);
+    }
+    byte[] standerdBallData()
+    {
+        Vector3 position = GameObject.FindGameObjectWithTag("BluePlayer").GetComponent<Transform>().position;
+        Quaternion rotate = GameObject.FindGameObjectWithTag("BluePlayer").GetComponent<Transform>().rotation;
+        return myData.standerdBallData(position, rotate);
+    }
 }
