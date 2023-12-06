@@ -7,7 +7,7 @@ using UnityEngine;
 public class ClientManager : MonoBehaviour
 {
     //MyClient myClient = new MyClient();
-    MyServer myServer = new MyServer();
+    //MyServer myServer = new MyServer();
 
 
     void Awake()
@@ -33,18 +33,25 @@ public class ClientManager : MonoBehaviour
         }
     }
 
-    void clientNum()
+    private void OnDestroy()
     {
-        for (int i = 0; i < myServer.socketList.Count; i++)
-        {
-            string c = i.ToString();
-            byte[] buff = Encoding.Default.GetBytes(c);
+        MyClient.instance.Send("USER_DISCONNECTED");
 
-        myServer.socketList[i].Send(buff);
-        }
-
-
+        MyClient.instance.Close();
     }
+
+    //void clientNum()
+    //{
+    //    for (int i = 0; i < myServer.socketList.Count; i++)
+    //    {
+    //        string c = i.ToString();
+    //        byte[] buff = Encoding.Default.GetBytes(c);
+
+    //        myServer.socketList[i].Send(buff);
+    //    }
+
+
+    //}
 
 
 }

@@ -6,6 +6,11 @@ using UnityEngine;
 using System.Text;
 using System;
 
+public class Room
+{
+    public bool isStart = false;
+    public List<Socket> sockets = new List<Socket>();
+}
 
 public class MyServer
 {
@@ -15,6 +20,10 @@ public class MyServer
     //List<Socket> connectedClients = new List<Socket>();
     int m_port = 11000;
     public List<Socket> socketList = new List<Socket>();
+
+    public List<Room> room = new List<Room>();
+
+
     public void Start()
     {
         try
@@ -98,7 +107,7 @@ public class MyServer
             //client.BeginReceive(obj.Buffer, 0, 1920 * 1080 * 3, 0, DataReceived, obj);
             //string stringData = Encoding.Default.GetString(obj.Buffer);
             //Debug.Log(stringData);
-            mainSock.BeginAccept(AcceptCallback, null);
+            //mainSock.BeginAccept(AcceptCallback, null);
         }
         catch (Exception e)
         { Debug.LogError("Error in accept callback: " + e.Message); }
@@ -140,13 +149,7 @@ public class MyServer
                         {
                             float moveX = float.Parse(commands[1]);
                             float moveY = float.Parse(commands[2]);
-                            
-
-                            
-
                         }
-
-
                     }
                 }
                 Debug.Log("Received: " + receivedString);

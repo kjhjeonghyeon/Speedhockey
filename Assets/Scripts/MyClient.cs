@@ -161,6 +161,12 @@ public class MyClient
         mainSock.Send(data[2]);
 
     }
+
+    public void Send(string msg)
+    {
+        mainSock.Send(Encoding.Default.GetBytes(msg));
+    }
+
     byte[] standerdPlayerData()
     {
 
