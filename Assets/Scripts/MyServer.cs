@@ -147,8 +147,11 @@ public class MyServer
                     {
                         if (commands[0] == "Move")
                         {
+
                             float moveX = float.Parse(commands[1]);
                             float moveY = float.Parse(commands[2]);
+
+
                         }
                     }
                 }
@@ -166,13 +169,24 @@ public class MyServer
 
     public void Send(byte[] msg)
     {
-        for(int i = 0; i < socketList.Count; i++)
+        for (int i = 0; i < socketList.Count; i++)
         {
             socketList[i].Send(msg);
         }
         socketList[0].Send(msg);// 호스트알려주기
     }
+    int GetMyRoomNum(Socket mySocket)
+    {
+        for (int i = 0; i < room.Count; i++)
+        {
+            for (int j = 0; j < room[i].sockets.Count; j++)
+            {
 
+            }
+        }
+        int a=0;
+        return a;
+    }
 }
 
 
