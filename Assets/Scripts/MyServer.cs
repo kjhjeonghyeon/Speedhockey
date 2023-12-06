@@ -87,8 +87,10 @@ public class MyServer
 
             // 다음 데이터 수신 대기
             client.BeginReceive(obj.Buffer, 0, obj.Buffer.Length, 0, DataReceived, obj);
+            mainSock.BeginAccept(AcceptCallback, null);
 
             Debug.Log("수락");
+
             //AsyncObject obj = new AsyncObject(1920 * 1080 * 3);
             //obj.WorkingSocket = client;
             //connectedClients.Add(client);
@@ -104,6 +106,8 @@ public class MyServer
     void DataReceived(IAsyncResult ar)
     {
         AsyncObject obj = (AsyncObject)ar.AsyncState;
+
+        Debug.Log("다타 리시브");
 
         try
         {
