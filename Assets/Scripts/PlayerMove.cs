@@ -73,7 +73,11 @@ public class PlayerMove : MonoBehaviour
     public void DataSend()
     {
         //공 데이터 보내기
-        
+        //입력및 출력
+        byte[] buf = Encoding.Default.GetBytes("BALL_POSITION:" + GameManager.instance.t_ball.position.x);
+        //MyClient.client.GetStream().Write(buf, 0, buf.Length);
+        //MyClient.client.GetStream().Flush();
+        MyClient.instance.Send(buf);
 
         //플레이어 데이터 보내기
     }

@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour
 
     List<Transform> t_players = new List<Transform>();
     public Transform[] t_game = new Transform[4];
+    public Transform t_ball;
     Texture color;
     [SerializeField] StartPoint[] startPoints_Red;
     [SerializeField] StartPoint[] startPoints_Blue;

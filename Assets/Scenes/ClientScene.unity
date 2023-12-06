@@ -1990,6 +1990,7 @@ MonoBehaviour:
   - {fileID: 6924031312997277950}
   - {fileID: 544630331}
   - {fileID: 706817614}
+  t_ball: {fileID: 8803519292106017800}
   startPoints_Red:
   - startPoint:
     - {fileID: 366764024}
@@ -2373,3 +2374,8 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fc46742a267daf342bd0ae5a39eaaca5, type: 3}
+--- !u!4 &8803519292106017800 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 687324681783374035, guid: fc46742a267daf342bd0ae5a39eaaca5, type: 3}
+  m_PrefabInstance: {fileID: 8803519292106017799}
+  m_PrefabAsset: {fileID: 0}
