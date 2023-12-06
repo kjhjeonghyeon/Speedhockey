@@ -6,10 +6,23 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
-
     List<Rigidbody> m_players = new List<Rigidbody>();
     public Rigidbody[] m_game = new Rigidbody[4];
     Texture color;
+    [SerializeField] List<List<Transform>> startPoint;
+
+    private void Awake()
+    {
+        if(instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(this.gameObject);
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -19,6 +32,8 @@ public class GameManager : MonoBehaviour
 
 
         }
+
+        Screen.SetResolution(960, 540, false);
 
     }
 
