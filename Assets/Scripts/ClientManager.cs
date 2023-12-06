@@ -2,13 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
-
+using UnityEngine.UI;
 
 public class ClientManager : MonoBehaviour
 {
-    //MyClient myClient = new MyClient();
-    //MyServer myServer = new MyServer();
-
+    [SerializeField] GameObject startButton;
 
     void Awake()
     {
@@ -18,6 +16,9 @@ public class ClientManager : MonoBehaviour
     private void Start()
     {
         MyClient.instance.Connect();
+
+        startButton.SetActive(false);
+
         //myClient.Connect();
     }
 
@@ -31,6 +32,11 @@ public class ClientManager : MonoBehaviour
             Debug.Log("Q ´©¸§");
             //.myClient.Send(buf);
         }
+    }
+
+    public void StartButton_SetActive_True()
+    {
+        startButton.SetActive(true);
     }
 
     private void OnDestroy()

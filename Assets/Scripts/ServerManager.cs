@@ -6,7 +6,7 @@ using UnityEngine;
 public class ServerManager : MonoBehaviour
 {
     //MyServer myServer = new MyServer();
-
+   
     // Start is called before the first frame update
     void Awake()
     {

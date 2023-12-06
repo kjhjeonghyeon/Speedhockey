@@ -137,13 +137,11 @@ public class MyClient
     {
         AsyncObject obj = (AsyncObject)ar.AsyncState;
 
-        int received = obj.WorkingSocket.EndReceive(ar);
+        //byte[] buffer = new byte[received];
 
-        byte[] buffer = new byte[received];
+        //Array.Copy(obj.Buffer, 0, buffer, 0, received);
 
-        Array.Copy(obj.Buffer, 0, buffer, 0, received);
-
-        Debug.Log("client receive : " + Encoding.Default.GetString(buffer));
+        //Debug.Log("client receive : " + Encoding.Default.GetString(buffer));
 
 
         try
@@ -167,8 +165,18 @@ public class MyClient
                             int clientNum = int.Parse(commands[1]);
                             float moveX = float.Parse(commands[2]);
                             float moveY = float.Parse(commands[3]);
-                            Debug.Log("recieve:" + clientNum + moveX + moveX);
+                            GameManager.instance.ClientMove(clientNum, moveX, moveY);
+                            
 
+                        }
+                        else if (commands[0] == "NUM")
+                        {
+                            playerNum = int.Parse(commands[1]);
+
+                            if (playerNum == 0)
+                            {
+
+                            }
                         }
                     }
                 }
@@ -225,4 +233,7 @@ public class MyClient
     //        Quaternion rotate = GameObject.FindGameObjectWithTag("BluePlayer").GetComponent<Transform>().rotation;
     //        return myData.standerdBallData(position, rotate);
     //    }
+
+
+
 }
