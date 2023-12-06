@@ -96,52 +96,40 @@ public class MyServer
             socketList.Add(client);
 
             //게임 방에 들어오는 순서대로 배치
-            if (room.Count <= 0)
+            bool successAdd = false;
+            for (int i = 0; i < room.Count; i++)
+            {
+                if (room[i].sockets.Count < room[i].MaxPlayerNum && !room[i].isStart)
+                {
+                    room[i].sockets.Add(client);
+
+                    Send("NUM:" + (room[i].sockets.Count - 1).ToString(), i, room[i].sockets.Count - 1);
+                    //room[i].sockets[room[i].sockets.Count - 1].Send(Encoding.Default.GetBytes("NUM:" + (room[i].sockets.Count - 1).ToString()));
+                    //Send("TOTAL:" + room[i].sockets.Count, i);
+
+                    //게임 시작 버튼 활성화 여부
+                    if (room[i].sockets.Count % 2 == 0)
+                    {
+                        Send("START_POSSIBILITY:1", i, 0);
+                    }
+                    else
+                    {
+                        Send("START_POSSIBILITY:0", i, 0);
+                    }
+
+                    successAdd = true;
+
+                    break;
+                }
+            }
+
+            if (!successAdd)
             {
                 room.Add(new Room());
-                room[0].sockets.Add(client);
+                room[room.Count - 1].sockets.Add(client);
 
-                Send("NUM:0", 0, 0);
-                //Send("TOTAL:1", 0);
-            }
-            else
-            {
-                bool successAdd = false;
-                for (int i = 0; i < room.Count; i++)
-                {
-                    if (room[i].sockets.Count < room[i].MaxPlayerNum && !room[i].isStart)
-                    {
-                        room[i].sockets.Add(client);
-
-                        Send("NUM:" + (room[i].sockets.Count - 1).ToString(), i, room[i].sockets.Count - 1);
-                        //room[i].sockets[room[i].sockets.Count - 1].Send(Encoding.Default.GetBytes("NUM:" + (room[i].sockets.Count - 1).ToString()));
-                        //Send("TOTAL:" + room[i].sockets.Count, i);
-
-                        //게임 시작 버튼 활성화 여부
-                        if (room[i].sockets.Count % 2 == 0)
-                        {
-                            Send("START_POSSIBILITY:1", i, 0);
-                        }
-                        else
-                        {
-                            Send("START_POSSIBILITY:0", i, 0);
-                        }
-
-                        successAdd = true;
-
-                        break;
-                    }
-                }
-
-                if (!successAdd)
-                {
-                    room.Add(new Room());
-                    room[room.Count - 1].sockets.Add(client);
-
-                    Send((room[room.Count - 1].sockets.Count - 1).ToString(), room.Count - 1, room[room.Count - 1].sockets.Count - 1);
-                    //Send("TOTAL:" + room[room.Count - 1].sockets.Count, room.Count - 1);
-                }
-
+                Send((room[room.Count - 1].sockets.Count - 1).ToString(), room.Count - 1, room[room.Count - 1].sockets.Count - 1);
+                //Send("TOTAL:" + room[room.Count - 1].sockets.Count, room.Count - 1);
             }
 
 
