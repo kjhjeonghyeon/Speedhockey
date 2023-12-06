@@ -62,6 +62,11 @@ public class GameManager : MonoBehaviour
     {
         this.totalPlayerNum = totalPlayerNum;
 
+        for (int i = 0; i < player.Length; i++)
+        {
+            Destroy(player[i]);
+        }
+
         if (totalPlayerNum <= 2)
         {
             for (int i = 0; i < totalPlayerNum; i++)
