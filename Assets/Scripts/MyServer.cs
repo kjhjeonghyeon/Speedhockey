@@ -27,7 +27,7 @@ public class MyServer
 
     public void Start()
     {
-        
+
         try
         {
             mainSock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -121,7 +121,7 @@ public class MyServer
                         {
                             Send("START_POSSIBILITY:0", i, 0);
                         }
-                        
+
 
                         break;
                     }
@@ -171,12 +171,19 @@ public class MyServer
                     {
                         if (commands[0] == "MOVE")
                         {
-                            Debug.Log("만든 함수 확인1:" + GetMyRoomNum(obj.WorkingSocket)/* + "만든 함수 확인2: "+ GetMyHostSocket(obj.WorkingSocket)*/);
-                            GetMyHostSocket(obj.WorkingSocket).Send(receivedData);
+                            //Debug.Log("만든 함수 확인1:" + GetMyRoomNum(obj.WorkingSocket)/* + "만든 함수 확인2: "+ GetMyHostSocket(obj.WorkingSocket)*/);
+                            //GetMyHostSocket(obj.WorkingSocket).Send(receivedData);
 
                             //float moveX = float.Parse(commands[2]);
                             //float moveY = float.Parse(commands[3]);
                             Debug.Log(receivedData);
+                            for (int i = 1; i < room[GetMyRoomNum(obj.WorkingSocket)].sockets.Count; i++)
+                            {
+                                room[GetMyRoomNum(obj.WorkingSocket)].sockets[i].Send(receivedData);
+
+
+
+                            }
 
                         }
                         else if (commands[0] == "USER_DISCONNECTED")
@@ -215,16 +222,11 @@ public class MyServer
                             }
                         }
 
-                        //for(int i=1; i < room[GetMyRoomNum(obj.WorkingSocket)].sockets.Count; i++)
-                        //{
-                        //    room[GetMyRoomNum(obj.WorkingSocket)].sockets[i]].send()
 
-                                
-                        //}
-                        
+
                     }
                 }
-             //   Debug.Log("Received: " + receivedString);
+                //   Debug.Log("Received: " + receivedString);
             }
 
             // 다음 데이터 수신 대기
@@ -232,7 +234,7 @@ public class MyServer
 
             //현재 룸 상태 출력
             Debug.Log("==========================");
-            for(int i = 0;i<room.Count;i++)
+            for (int i = 0; i < room.Count; i++)
             {
                 Debug.Log(i + "번 룸 : " + room[i].sockets.Count + "명, isStart : " + room[i].isStart);
             }
@@ -279,26 +281,26 @@ public class MyServer
         {
             for (int j = 0; j < room[i].sockets.Count; j++)
             {
-                if(room[i].sockets[j] == mySocket)
+                if (room[i].sockets[j] == mySocket)
                 {
                     return i;
                 }
-                
+
             }
         }
         return -1;
     }
     Socket GetMyHostSocket(Socket mySocket)
     {
-      if(GetMyRoomNum(mySocket) != -1)
-        return room[GetMyRoomNum(mySocket)].sockets[0];
-      else
-        return null;
-       
+        if (GetMyRoomNum(mySocket) != -1)
+            return room[GetMyRoomNum(mySocket)].sockets[0];
+        else
+            return null;
+
     }
     float giveToClientData()
     {
-        
+
         return -1;
     }
 }
