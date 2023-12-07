@@ -128,6 +128,16 @@ public class MyServer
 
                 Send("NUM:" + (room[room.Count - 1].sockets.Count - 1).ToString(), room.Count - 1, room[room.Count - 1].sockets.Count - 1);
                 Send("TOTAL:" + room[room.Count - 1].sockets.Count, room.Count - 1);
+
+                //게임 시작 버튼 활성화 여부
+                if (room[room.Count - 1].sockets.Count % 2 == 0)
+                {
+                    Send("START_POSSIBILITY:1", room.Count - 1, 0);
+                }
+                else
+                {
+                    Send("START_POSSIBILITY:0", room.Count - 1, 0);
+                }
             }
 
 
@@ -255,7 +265,7 @@ public class MyServer
                     //Debug.Log("Received: " + receivedString);
                 }
 
-
+                Debug.Log("Received: " + Encoding.Default.GetString(receivedData));
             }
 
             // 다음 데이터 수신 대기

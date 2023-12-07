@@ -20,6 +20,9 @@ public class PlayerMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!GameManager.instance.isStart)
+            return;
+
         InputMove();
 
         //Debug.Log(rb.velocity);

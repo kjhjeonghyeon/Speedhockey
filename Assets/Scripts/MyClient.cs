@@ -187,38 +187,38 @@ public class MyClient
                             {
                                 ClientManager.instance.StartButton_SetActive_True();
                             }
+                        //}
+                        //else if (commands[0] == "BALL_POSITION" && MyClient.instance.playerNum != 0)
+                        //{
+                        //    float posX = float.Parse(commands[1]);
+                        //    float posY = float.Parse(commands[2]);
+                        //    float posZ = float.Parse(commands[3]);
+                        //    if (playerNum == 0)
+                        //    {
+                        //        ClientManager.instance.StartButton_SetActive_True();
+                        //    }
+                        }
+                        else if (commands[0] == "GOAL")
+                        {
+                            Debug.Log(receivedString + " GAOL 초기화");
+                            int redScore = int.Parse(commands[1]);
+                            int blueScore = int.Parse(commands[2]);
+
+                            GameManager.instance.text[0].text = redScore.ToString();
+                            GameManager.instance.text[1].text = blueScore.ToString();
+
+                            GameManager.instance.t_ball.gameObject.GetComponent<MeshRenderer>().enabled = false;
+
+
                         }
                         else if (commands[0] == "BALL_POSITION" && MyClient.instance.playerNum != 0)
                         {
                             float posX = float.Parse(commands[1]);
                             float posY = float.Parse(commands[2]);
                             float posZ = float.Parse(commands[3]);
-                                if (playerNum == 0)
-                                {
-                                    ClientManager.instance.StartButton_SetActive_True();
-                                }
-                            }
-                            else if (commands[0] == "GOAL")
-                            {
-                                Debug.Log(receivedString + " GAOL 초기화");
-                                int redScore = int.Parse(commands[1]);
-                                int blueScore = int.Parse(commands[2]);
-
-                                GameManager.instance.text[0].text = redScore.ToString();
-                                GameManager.instance.text[1].text = blueScore.ToString();
-                            
-                                GameManager.instance.t_ball.gameObject.GetComponent<MeshRenderer>().enabled = false;
 
 
-                            }
-                            else if (commands[0] == "BALL_POSITION" && MyClient.instance.playerNum != 0)
-                            {
-                                float posX = float.Parse(commands[1]);
-                                float posY = float.Parse(commands[2]);
-                                float posZ = float.Parse(commands[3]);
-
-
-                                GameManager.instance.t_ball.position = new Vector3(posX, posY, posZ);
+                            GameManager.instance.t_ball.position = new Vector3(posX, posY, posZ);
 
 
                         }
@@ -230,7 +230,7 @@ public class MyClient
                             float posZ = float.Parse(commands[4]);
 
 
-                                GameManager.instance.t_game[player_num].position = new Vector3(posX, posY, posZ);
+                            GameManager.instance.t_game[player_num].position = new Vector3(posX, posY, posZ);
 
 
                         }
@@ -264,16 +264,15 @@ public class MyClient
                     }
                 }
                 //Debug.Log("Received: " + receivedString);
-                Debug.Log("Received: " + Encoding.Default.GetString(receivedData));
             }
-
+            Debug.Log("Received: " + Encoding.Default.GetString(receivedData));
         }
 
         // 다음 데이터 수신 대기
         obj.WorkingSocket.BeginReceive(obj.Buffer, 0, obj.Buffer.Length, 0, DataReceived, obj);
         //try
         //{
-            
+
         //}
         //catch (Exception e)
         //{

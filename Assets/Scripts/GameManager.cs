@@ -40,6 +40,9 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] List<List<Transform>> startPoint;
     int speed = 3;
+
+    public bool isStart = false;
+
     private void Awake()
     {
         if (instance == null)
@@ -65,7 +68,7 @@ public class GameManager : MonoBehaviour
         //}
 
         Screen.SetResolution(960, 540, false);
-        Time.timeScale = 0;
+        //Time.timeScale = 0;
     }
 
     public void GameStartButton()
@@ -75,12 +78,14 @@ public class GameManager : MonoBehaviour
 
     public void GameStart()
     {
-        Time.timeScale = 1;
+        //Time.timeScale = 1;
+        isStart = true;
     }
 
     public void GameEnd()
     {
-        Time.timeScale = 0;
+        //Time.timeScale = 0;
+        isStart = false;
     }
 
     public void PlayerCreate(int totalPlayerNum)
@@ -92,30 +97,21 @@ public class GameManager : MonoBehaviour
             Destroy(player[i]);
         }
 
-        Debug.Log("flag1");
-
         if (totalPlayerNum <= 2)
         {
-        Debug.Log("flag1");
             for (int i = 0; i < totalPlayerNum; i++)
             {
                 if (i % 2 == 0)
                     player[i] = Instantiate(PlayerPrefab_Red_Host, startPoints_Red[0].startPoint[0].position, Quaternion.identity);
                 else
                     player[i] = Instantiate(PlayerPrefab_Blue, startPoints_Blue[0].startPoint[0].position, Quaternion.identity);
-        Debug.Log("flag8");
                 player[i].GetComponent<PlayerMove>().SetPlayerNum(i);
-        Debug.Log("flag9");
                 r_game[i] = player[i].GetComponent<Rigidbody>();
-        Debug.Log("flag10");
                 t_game[i] = player[i].transform;
-        Debug.Log("flag7");
             }
-        Debug.Log("flag5");
         }
         else
         {
-        Debug.Log("flag3");
             int redPointNum = 0;
             int bluePointNum = 0;
             for (int i = 0; i < totalPlayerNum; i++)
@@ -132,7 +128,6 @@ public class GameManager : MonoBehaviour
                 r_game[i] = player[i].GetComponent<Rigidbody>();
                 t_game[i] = player[i].transform;
             }
-        Debug.Log("flag4");
         }
     }
 
