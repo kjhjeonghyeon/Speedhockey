@@ -36,7 +36,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] StartPoint[] startPoints_Red;
     [SerializeField] StartPoint[] startPoints_Blue;
 
-    //int totalPlayerNum = 0;
+    [NonSerialized]
+    public int totalPlayerNum = 0;
 
     [SerializeField] List<List<Transform>> startPoint;
     int speed = 3;
@@ -90,7 +91,7 @@ public class GameManager : MonoBehaviour
 
     public void PlayerCreate(int totalPlayerNum)
     {
-        //this.totalPlayerNum = totalPlayerNum;
+        this.totalPlayerNum = totalPlayerNum;
 
         for (int i = 0; i < player.Length; i++)
         {
