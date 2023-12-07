@@ -13,7 +13,8 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
-    public GameObject[] player;
+    GameObject[] player = new GameObject[4];
+    [SerializeField] GameObject PlayerPrefab_Red_Host;
     [SerializeField] GameObject PlayerPrefab_Red;
     [SerializeField] GameObject PlayerPrefab_Blue;
     //   List<Rigidbody> m_players = new List<Rigidbody>();
@@ -29,7 +30,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] StartPoint[] startPoints_Red;
     [SerializeField] StartPoint[] startPoints_Blue;
 
-    int totalPlayerNum = 0;
+    //int totalPlayerNum = 0;
 
     [SerializeField] List<List<Transform>> startPoint;
     int speed = 3;
@@ -56,45 +57,74 @@ public class GameManager : MonoBehaviour
         //}
 
         Screen.SetResolution(960, 540, false);
+        Time.timeScale = 0;
+    }
 
+    public void GameStartButton()
+    {
+        MyClient.instance.Send("START:1");
+    }
+
+    public void GameStart()
+    {
+        Time.timeScale = 1;
+    }
+
+    public void GameEnd()
+    {
+        Time.timeScale = 0;
     }
 
     public void PlayerCreate(int totalPlayerNum)
     {
-        this.totalPlayerNum = totalPlayerNum;
+        //this.totalPlayerNum = totalPlayerNum;
 
         for (int i = 0; i < player.Length; i++)
         {
             Destroy(player[i]);
         }
 
+        Debug.Log("flag1");
+
         if (totalPlayerNum <= 2)
         {
+        Debug.Log("flag1");
             for (int i = 0; i < totalPlayerNum; i++)
             {
                 if (i % 2 == 0)
-                {
-                    player[i] = Instantiate(PlayerPrefab_Red, startPoints_Red[0].startPoint[0].position, Quaternion.identity);
-                }
+                    player[i] = Instantiate(PlayerPrefab_Red_Host, startPoints_Red[0].startPoint[0].position, Quaternion.identity);
                 else
-                {
                     player[i] = Instantiate(PlayerPrefab_Blue, startPoints_Blue[0].startPoint[0].position, Quaternion.identity);
-                }
+        Debug.Log("flag8");
                 player[i].GetComponent<PlayerMove>().SetPlayerNum(i);
+        Debug.Log("flag9");
+                r_game[i] = player[i].GetComponent<Rigidbody>();
+        Debug.Log("flag10");
+                t_game[i] = player[i].transform;
+        Debug.Log("flag7");
             }
+        Debug.Log("flag5");
         }
         else
         {
+        Debug.Log("flag3");
             int redPointNum = 0;
             int bluePointNum = 0;
             for (int i = 0; i < totalPlayerNum; i++)
             {
-                if (i % 2 == 0)
+                if (i == 0)
+                {
+                    player[i] = Instantiate(PlayerPrefab_Red_Host, startPoints_Red[1].startPoint[redPointNum++].position, Quaternion.identity);
+                }
+                else if (i % 2 == 0)
                     player[i] = Instantiate(PlayerPrefab_Red, startPoints_Red[1].startPoint[redPointNum++].position, Quaternion.identity);
                 else
                     player[i] = Instantiate(PlayerPrefab_Blue, startPoints_Blue[1].startPoint[bluePointNum++].position, Quaternion.identity);
                 player[i].GetComponent<PlayerMove>().SetPlayerNum(i);
+                r_game[i] = player[i].GetComponent<Rigidbody>();
+                t_game[i] = player[i].transform;
             }
+        Debug.Log("flag4");
         }
     }
 

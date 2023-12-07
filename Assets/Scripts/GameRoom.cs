@@ -14,7 +14,7 @@ public class GameRoomData
 
 public class GameRoom : MonoBehaviour
 {
-    GameRoomData gameRoomData = new GameRoomData();
+    //GameRoomData gameRoomData = new GameRoomData();
 
     // Start is called before the first frame update
     void Start()

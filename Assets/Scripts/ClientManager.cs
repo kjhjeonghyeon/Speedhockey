@@ -27,7 +27,7 @@ public class ClientManager : MonoBehaviour
     {
         MyClient.instance.Connect();
 
-        startButton.SetActive(false);
+        //startButton.SetActive(false);
 
         //myClient.Connect();
     }
