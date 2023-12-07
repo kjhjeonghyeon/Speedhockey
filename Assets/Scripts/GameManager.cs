@@ -40,7 +40,7 @@ public class GameManager : MonoBehaviour
     public int totalPlayerNum = 0;
 
     [SerializeField] List<List<Transform>> startPoint;
-    int speed = 3;
+    int speed = 6;
 
     public bool isStart = false;
 
