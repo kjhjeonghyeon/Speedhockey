@@ -201,6 +201,11 @@ public class MyServer
                                 //host한텐 안보내도 되지만 걍 보내자(보내도 처리X)
                                 Send(receivedString, GetMyRoomNum(obj.WorkingSocket));
                             }
+                            else if (commands[0] == "GOAL")
+                            {
+                                //host한텐 안보내도 되지만 걍 보내자(보내도 처리X)
+                                Send(receivedString, GetMyRoomNum(obj.WorkingSocket));
+                            }
                             else if (commands[0] == "USER_DISCONNECTED")
                             {
                                 //소켓리스트에서 연결해제된 소켓 삭제
