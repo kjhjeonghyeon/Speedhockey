@@ -144,8 +144,8 @@ public class MyClient
         //Debug.Log("client receive : " + Encoding.Default.GetString(buffer));
 
 
-        try
-        {
+        //try
+        //{
             int bytesRead = obj.WorkingSocket.EndReceive(ar);
             if (bytesRead > 0)
             {
@@ -189,15 +189,28 @@ public class MyClient
                                     ClientManager.instance.StartButton_SetActive_True();
                                 }
                             }
+                            else if (commands[0] == "GOAL")
+                            {
+                                Debug.Log(receivedString + " GAOL 초기화");
+                                int redScore = int.Parse(commands[1]);
+                                int blueScore = int.Parse(commands[2]);
+
+                                GameManager.instance.text[0].text = redScore.ToString();
+                                GameManager.instance.text[1].text = blueScore.ToString();
+                            
+                                GameManager.instance.t_ball.gameObject.GetComponent<MeshRenderer>().enabled = false;
+
+
+                            }
                             else if (commands[0] == "BALL_POSITION" && MyClient.instance.playerNum != 0)
                             {
                                 float posX = float.Parse(commands[1]);
                                 float posY = float.Parse(commands[2]);
                                 float posZ = float.Parse(commands[3]);
 
-                               
+
                                 GameManager.instance.t_ball.position = new Vector3(posX, posY, posZ);
-                               
+
 
                             }
                             else if (commands[0] == "PLAYER_POSITION" && MyClient.instance.playerNum != 0)
@@ -209,7 +222,7 @@ public class MyClient
 
 
                                 GameManager.instance.t_game[player_num].position = new Vector3(posX, posY, posZ);
-                                
+
 
                             }
                             //else if (commands[0] == "START_POSSIBILITY")
@@ -238,11 +251,11 @@ public class MyClient
 
             // 다음 데이터 수신 대기
             obj.WorkingSocket.BeginReceive(obj.Buffer, 0, obj.Buffer.Length, 0, DataReceived, obj);
-        }
-        catch (Exception e)
-        {
-            Debug.LogError("Error in DataReceived: " + e.Message);
-        }
+        //}
+        //catch (Exception e)
+        //{
+        //    Debug.LogError("Error in DataReceived: " + e.Message);
+        //}
 
         mainSock.BeginReceive(obj.Buffer, 0, obj.BufferSize, 0, DataReceived, obj);
     }
@@ -265,8 +278,8 @@ public class MyClient
 
     public void Send(string msg)
     {
-        mainSock.Send(Encoding.Default.GetBytes(msg+";"));
-        
+        mainSock.Send(Encoding.Default.GetBytes(msg + ";"));
+
     }
 
     //    byte[] standerdPlayerData()

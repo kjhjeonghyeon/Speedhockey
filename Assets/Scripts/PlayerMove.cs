@@ -23,8 +23,8 @@ public class PlayerMove : MonoBehaviour
         InputMove();
 
         //Debug.Log(rb.velocity);
-
-        DataSend();
+        if(MyClient.instance.playerNum == 0 )
+            DataSend();
 
 
     }

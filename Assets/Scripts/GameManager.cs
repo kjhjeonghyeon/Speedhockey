@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 [Serializable]
 public class StartPoint
@@ -12,7 +14,9 @@ public class StartPoint
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
-
+    public Text[] text=new Text[2];
+    public int red = 0;
+    public int blue = 0;
     public GameObject[] player;
     [SerializeField] GameObject PlayerPrefab_Red;
     [SerializeField] GameObject PlayerPrefab_Blue;
@@ -43,6 +47,8 @@ public class GameManager : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
+        text[0].text = "0";
+        text[1].text = "0";
     }
 
     // Start is called before the first frame update
@@ -137,4 +143,7 @@ public class GameManager : MonoBehaviour
             // Debug.Log("recieve:" + playerNum + moveX + moveX);
         }
     }
+    
+          
+  
 }
