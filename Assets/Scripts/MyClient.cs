@@ -143,158 +143,190 @@ public class MyClient
 
         //Debug.Log("client receive : " + Encoding.Default.GetString(buffer));
 
-        int bytesRead = obj.WorkingSocket.EndReceive(ar);
-        if (bytesRead > 0)
+        
+        try
         {
-            byte[] receivedData = new byte[bytesRead];
-            Array.Copy(obj.Buffer, 0, receivedData, 0, bytesRead);
+			int bytesRead = obj.WorkingSocket.EndReceive(ar);
+			if (bytesRead > 0)
+			{
+				byte[] receivedData = new byte[bytesRead];
+				Array.Copy(obj.Buffer, 0, receivedData, 0, bytesRead);
 
-            // 여기서 receivedData를 활용하여 필요한 작업 수행
-            // 예시: 문자열로 변환하여 출력
-            string[] split_receivedData = Encoding.Default.GetString(receivedData).Split(";");
-            Debug.Log(split_receivedData.Length);
-            for (int siter = 0; siter < split_receivedData.Length - 1; siter++)
-            {
-                string receivedString = split_receivedData[siter];
-                Debug.Log(receivedString);
-                if (receivedString != "")
-                {
-                    string[] commands = receivedString.Split(":");
-                    if (commands.Length > 0)
-                    {
-                        if (commands[0] == "MOVE")
-                        {
-                            int clientNum = int.Parse(commands[1]);
-                            float moveX = float.Parse(commands[2]);
-                            float moveY = float.Parse(commands[3]);
-                            if (playerNum == 0)
-                            {
-                                GameManager.instance.ToClientSendFromHostMove(clientNum, moveX, moveY);
-                            }
-                            //else
-                            //{
-                            //	GameManager.instance.ClientMove(clientNum, moveX, moveY);
+				// 여기서 receivedData를 활용하여 필요한 작업 수행
+				// 예시: 문자열로 변환하여 출력
+				string[] split_receivedData = Encoding.Default.GetString(receivedData).Split(";");
+				//Debug.Log(split_receivedData.Length);
+				for (int siter = 0; siter < split_receivedData.Length - 1; siter++)
+				{
+					string receivedString = split_receivedData[siter];
+					//Debug.Log(receivedString);
+					if (receivedString != "")
+					{
+						string[] commands = receivedString.Split(":");
+						if (commands.Length > 0)
+						{
+							if (commands[0] == "MOVE")
+							{
+								int clientNum = int.Parse(commands[1]);
+								float moveX = float.Parse(commands[2]);
+								float moveY = float.Parse(commands[3]);
+								if (playerNum == 0)
+								{
+									ClientManager.Enqueue(() => {
+										GameManager.instance.ToClientSendFromHostMove(clientNum, moveX, moveY);
+									});
+									
+								}
 
-                            //}
+							}
+							else if (commands[0] == "NUM")
+							{
+								//Debug.Log(receivedString + " NUM 초기화");
+								playerNum = int.Parse(commands[1]);
 
-                        }
-                        else if (commands[0] == "NUM")
-                        {
-                            Debug.Log(receivedString + " NUM 초기화");
-                            playerNum = int.Parse(commands[1]);
+								if (playerNum == 0)
+								{
+									ClientManager.Enqueue(() => {
+										ClientManager.instance.StartButton_SetActive_True();
+									});
+								}
+							}
+							else if (commands[0] == "GOAL1")
+							{
+								//Debug.Log(receivedString + " GAOL1 초기화");
+								//GameManager.instance.t_ball.gameObject.GetComponent<MeshRenderer>().enabled = false;
+								int redScore = int.Parse(commands[1]);
+								int posX = int.Parse(commands[2]);
+								float posY = float.Parse(commands[3]);
+								int posZ = int.Parse(commands[4]);
 
-                            if (playerNum == 0)
-                            {
-                                ClientManager.instance.StartButton_SetActive_True();
-                            }
-                        }
-                        else if (commands[0] == "GOAL1")
-                        {
-                            Debug.Log(receivedString + " GAOL1 초기화");
-                            //GameManager.instance.t_ball.gameObject.GetComponent<MeshRenderer>().enabled = false;
-                            int redScore = int.Parse(commands[1]);
-                            int posX = int.Parse(commands[2]);
-                            float posY = float.Parse(commands[3]);
-                            int posZ = int.Parse(commands[4]);
+								ClientManager.Enqueue(() => {
+									GameManager.instance.text[0].text = redScore.ToString();
+									GameManager.instance.originPosisition();
+								});
 
-                            GameManager.instance.text[0].text = redScore.ToString();
-                            GameManager.instance.originPosisition();
-                            if (playerNum != 0)
-                            {
-                                GameManager.instance.redScore = redScore;
-                                //GameManager.instance.t_ball.gameObject.GetComponent<MeshRenderer>().enabled = true;
-                                GameManager.instance.t_ball.position = new Vector3(posX, posY, posZ);
-                                GameManager.instance.t_ball.position = new Vector3(posX, posY, posZ);
+								
+								if (playerNum != 0)
+								{
+									ClientManager.Enqueue(() => {
+										GameManager.instance.redScore = redScore;
+										//GameManager.instance.t_ball.gameObject.GetComponent<MeshRenderer>().enabled = true;
+										GameManager.instance.t_ball.transform.position = new Vector3(posX, posY, posZ);
+										GameManager.instance.t_ball.transform.position = new Vector3(posX, posY, posZ);
+									});
+									
 
-                            }
+								}
 
-                        }
-                        else if (commands[0] == "GOAL2")
-                        {
-                            Debug.Log(receivedString + " GAOL2 초기화");
-                            //GameManager.instance.t_ball.gameObject.GetComponent<MeshRenderer>().enabled = false;
-                            int blueScore = int.Parse(commands[1]);
-                            int posX = int.Parse(commands[2]);
-                            float posY = float.Parse(commands[3]);
-                            int posZ = int.Parse(commands[4]);
-                            GameManager.instance.text[1].text = blueScore.ToString();
-                            GameManager.instance.originPosisition();
-                            if (playerNum != 0)
-                            {
-                                GameManager.instance.redScore = blueScore;
-                                //Debug.Log(GameManager.instance.t_ball.gameObject.GetComponent<MeshRenderer>().enabled);
-                                //GameManager.instance.t_ball.gameObject.GetComponent<MeshRenderer>().enabled = true;
-                                GameManager.instance.t_ball.position = new Vector3(posX, posY, posZ);
+							}
+							else if (commands[0] == "GOAL2")
+							{
+								//Debug.Log(receivedString + " GAOL2 초기화");
+								//GameManager.instance.t_ball.gameObject.GetComponent<MeshRenderer>().enabled = false;
+								int blueScore = int.Parse(commands[1]);
+								int posX = int.Parse(commands[2]);
+								float posY = float.Parse(commands[3]);
+								int posZ = int.Parse(commands[4]);
+								ClientManager.Enqueue(() => {
+									GameManager.instance.text[1].text = blueScore.ToString();
+									GameManager.instance.originPosisition();
+								});
+								
+								if (playerNum != 0)
+								{
+									ClientManager.Enqueue(() => {
+										GameManager.instance.redScore = blueScore;
+										//Debug.Log(GameManager.instance.t_ball.gameObject.GetComponent<MeshRenderer>().enabled);
+										//GameManager.instance.t_ball.gameObject.GetComponent<MeshRenderer>().enabled = true;
+										GameManager.instance.t_ball.transform.position = new Vector3(posX, posY, posZ);
+									});
+									
 
-                            }
-                        }
-                        else if (commands[0] == "BALL_POSITION" && MyClient.instance.playerNum != 0)
-                        {
-                            float posX = float.Parse(commands[1]);
-                            float posY = float.Parse(commands[2]);
-                            float posZ = float.Parse(commands[3]);
+								}
+							}
+							else if (commands[0] == "BALL_POSITION" && MyClient.instance.playerNum != 0)
+							{
+								float posX = float.Parse(commands[1]);
+								float posY = float.Parse(commands[2]);
+								float posZ = float.Parse(commands[3]);
 
+								//Debug.Log("공위치 받음" + posX + " " + posY + " " + posZ + " " +( GameManager.instance.t_ball != null));
 
-                            GameManager.instance.t_ball.position = new Vector3(posX, posY, posZ);
-
-
-                        }
-                        else if (commands[0] == "PLAYER_POSITION" && MyClient.instance.playerNum != 0)
-                        {
-                            int player_num = int.Parse(commands[1]);
-                            float posX = float.Parse(commands[2]);
-                            float posY = float.Parse(commands[3]);
-                            float posZ = float.Parse(commands[4]);
+								//GameManager.instance.t_ball.transform.position = new Vector3(posX, posY, posZ);
+								ClientManager.Enqueue(() => {
+									GameManager.instance.SetBallPosition(new Vector3(posX, posY, posZ));
+								});
+								
 
 
-                            GameManager.instance.t_game[player_num].position = new Vector3(posX, posY, posZ);
+							}
+							else if (commands[0] == "PLAYER_POSITION" && MyClient.instance.playerNum != 0)
+							{
+								int player_num = int.Parse(commands[1]);
+								float posX = float.Parse(commands[2]);
+								float posY = float.Parse(commands[3]);
+								float posZ = float.Parse(commands[4]);
+
+								ClientManager.Enqueue(() => {
+									GameManager.instance.t_game[player_num].position = new Vector3(posX, posY, posZ);
+								});
+
+								
 
 
-                        }
-                        else if (commands[0] == "START_POSSIBILITY")
-                        {
-                            if (playerNum == 0)
-                            {
-                                if (int.Parse(commands[1]) == 0)
-                                {
-                                    ClientManager.instance.StartButton_Interactable_False();
-                                }
-                                else
-                                {
-                                    ClientManager.instance.StartButton_Interactable_True();
-                                }
-                            }
-                        }
-                        else if (commands[0] == "TOTAL")
-                        {
-                            Debug.Log("total test11");
-                            GameManager.instance.PlayerCreate(int.Parse(commands[1]));
-                            Debug.Log("total test22");
-                        }
-                        else if (commands[0] == "START")
-                        {
-                            if (int.Parse(commands[1]) == 1)
-                            {
-                                GameManager.instance.GameStart();
-                            }
-                        }
-                    }
-                }
-                //Debug.Log("Received: " + receivedString);
-            }
-            Debug.Log("Received: " + Encoding.Default.GetString(receivedData));
+							}
+							else if (commands[0] == "START_POSSIBILITY")
+							{
+								if (playerNum == 0)
+								{
+									if (int.Parse(commands[1]) == 0)
+									{
+										ClientManager.Enqueue(() => {
+											ClientManager.instance.StartButton_Interactable_False();
+										});
+										
+									}
+									else
+									{
+										ClientManager.Enqueue(() => {
+											ClientManager.instance.StartButton_Interactable_True();
+										});
+										
+									}
+								}
+							}
+							else if (commands[0] == "TOTAL")
+							{
+								//Debug.Log("total test11");
+								ClientManager.Enqueue(() => {
+									GameManager.instance.PlayerCreate(int.Parse(commands[1]));
+								});
+								
+								//Debug.Log("total test22");
+							}
+							else if (commands[0] == "START")
+							{
+								if (int.Parse(commands[1]) == 1)
+								{
+									ClientManager.Enqueue(() => {
+										GameManager.instance.GameStart();
+									});
+								}
+							}
+						}
+					}
+					//Debug.Log("Received: " + receivedString);
+				}
+				//Debug.Log("Received: " + Encoding.Default.GetString(receivedData));
+			}
+
+			// 다음 데이터 수신 대기
+			obj.WorkingSocket.BeginReceive(obj.Buffer, 0, obj.Buffer.Length, 0, DataReceived, obj);
+		}
+        catch (Exception e)
+        {
+            Debug.LogError("Error in DataReceived: " + e.Message);
         }
-
-        // 다음 데이터 수신 대기
-        obj.WorkingSocket.BeginReceive(obj.Buffer, 0, obj.Buffer.Length, 0, DataReceived, obj);
-        //try
-        //{
-
-        //}
-        //catch (Exception e)
-        //{
-        //    Debug.LogError("Error in DataReceived: " + e.Message);
-        //}
 
         mainSock.BeginReceive(obj.Buffer, 0, obj.BufferSize, 0, DataReceived, obj);
     }

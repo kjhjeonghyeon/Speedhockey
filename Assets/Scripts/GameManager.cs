@@ -30,7 +30,7 @@ public class GameManager : MonoBehaviour
 
     List<Transform> t_players = new List<Transform>();
     public Transform[] t_game = new Transform[4];
-    public Transform t_ball;
+    public GameObject t_ball;
     Texture color;
     [SerializeField] StartPoint[] startPoints_Red;
     [SerializeField] StartPoint[] startPoints_Blue;
@@ -70,10 +70,16 @@ public class GameManager : MonoBehaviour
         //Time.timeScale = 0;
     }
 
+    public void SetBallPosition(Vector3 pos)
+    {
+        t_ball.transform.position = pos;
+    }
+
     public void GameStartButton()
     {
         MyClient.instance.Send("START:1");
-    }
+
+	}
 
     public void GameStart()
     {
@@ -178,11 +184,18 @@ public class GameManager : MonoBehaviour
     IEnumerator ioriginPosition()
     {
 
-        yield return null;
-        t_ball.GetComponent<MeshRenderer>().enabled = false;
-        yield return new WaitForSeconds(1);
-        t_ball.transform.position =new Vector3(0,0.604f,0);
-        t_ball.GetComponent<MeshRenderer>().enabled = true;
+        //yield return null;
+        //t_ball.GetComponent<MeshRenderer>().enabled = false;
+        //yield return new WaitForSeconds(1);
+        //t_ball.transform.position =new Vector3(0,0.604f,0);
+        //t_ball.GetComponent<MeshRenderer>().enabled = true;
 
-    }
+
+		yield return null;
+        t_ball.gameObject.SetActive(false);
+		yield return new WaitForSeconds(1);
+		t_ball.transform.position = new Vector3(0, 0.604f, 0);
+        t_ball.gameObject.SetActive(true);
+
+	}
 }

@@ -76,7 +76,7 @@ public class PlayerMove : MonoBehaviour
     public void DataSend()
     {
         //공 데이터 보내기
-        byte[] buf1 = Encoding.Default.GetBytes("BALL_POSITION:" + GameManager.instance.t_ball.position.x + ":" + GameManager.instance.t_ball.position.y + ":" + GameManager.instance.t_ball.position.z + ";");
+        byte[] buf1 = Encoding.Default.GetBytes("BALL_POSITION:" + GameManager.instance.t_ball.transform.position.x + ":" + GameManager.instance.t_ball.transform.position.y + ":" + GameManager.instance.t_ball.transform.position.z + ";");
         MyClient.instance.Send(buf1);
 
         //플레이어 데이터 보내기

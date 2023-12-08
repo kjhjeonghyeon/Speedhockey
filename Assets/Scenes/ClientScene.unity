@@ -1922,6 +1922,11 @@ Transform:
   m_Father: {fileID: 997934115}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1552788855 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4286064649199363390, guid: fc46742a267daf342bd0ae5a39eaaca5, type: 3}
+  m_PrefabInstance: {fileID: 8803519292106017799}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1556071583
 GameObject:
   m_ObjectHideFlags: 0
@@ -2231,8 +2236,8 @@ MonoBehaviour:
   text:
   - {fileID: 1556071585}
   - {fileID: 487138581}
-  red: 0
-  blue: 0
+  redScore: 0
+  blueScore: 0
   PlayerPrefab_Red_Host: {fileID: 4832548639960473946, guid: 3c10a7b09c7bdd54084dc603a2fc3ff2, type: 3}
   PlayerPrefab_Red: {fileID: 4832548639960473946, guid: ec2a50141b3d2cd4fb38d4413318de2c, type: 3}
   PlayerPrefab_Blue: {fileID: 514873367761026792, guid: 0ace53b6446cc524cbe0af147e226c75, type: 3}
@@ -2246,7 +2251,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  t_ball: {fileID: 8803519292106017800}
+  t_ball: {fileID: 1552788855}
   startPoints_Red:
   - startPoint:
     - {fileID: 366764024}
@@ -2259,6 +2264,7 @@ MonoBehaviour:
   - startPoint:
     - {fileID: 938576928}
     - {fileID: 236475047}
+  isStart: 0
 --- !u!4 &1993535591
 Transform:
   m_ObjectHideFlags: 0
@@ -2713,8 +2719,3 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fc46742a267daf342bd0ae5a39eaaca5, type: 3}
---- !u!4 &8803519292106017800 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 687324681783374035, guid: fc46742a267daf342bd0ae5a39eaaca5, type: 3}
-  m_PrefabInstance: {fileID: 8803519292106017799}
-  m_PrefabAsset: {fileID: 0}

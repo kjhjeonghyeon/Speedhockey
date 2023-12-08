@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
@@ -6,9 +7,18 @@ using UnityEngine.UI;
 
 public class ClientManager : MonoBehaviour
 {
-    public static ClientManager instance;  
+    public static ClientManager instance;
 
-    [SerializeField] GameObject startButton;
+	private static readonly ConcurrentQueue<System.Action> _executionQueue = new ConcurrentQueue<System.Action>();
+
+	public static void Enqueue(System.Action action)
+	{
+		_executionQueue.Enqueue(action);
+	}
+
+    
+
+	[SerializeField] GameObject startButton;
     //bool startPossibility = false;
 
     void Awake()
@@ -32,19 +42,16 @@ public class ClientManager : MonoBehaviour
         //myClient.Connect();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            byte[] buf = Encoding.Default.GetBytes("Client -> Server asdasdasdasdasdasdasdasasd;");
-            MyClient.instance.Send(buf);
-            Debug.Log("Q ´©¸§");
-            //.myClient.Send(buf);
-        }
-    }
+	private void Update()
+	{
+		while (_executionQueue.TryDequeue(out var action))
+		{
+			action?.Invoke();
+		}
+	}
 
-    public void StartButton_SetActive_True()
+
+	public void StartButton_SetActive_True()
     {
         startButton.SetActive(true);
     }
