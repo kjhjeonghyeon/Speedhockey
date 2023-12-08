@@ -18,6 +18,12 @@ public class GameManager : MonoBehaviour
     public int redScore = 0;
     public int blueScore = 0;
     public GameObject[] player;
+    public int red = 0;
+    public int blue = 0;
+    //public GameObject[] player;
+
+    GameObject[] player = new GameObject[4];
+    [SerializeField] GameObject PlayerPrefab_Red_Host;
     [SerializeField] GameObject PlayerPrefab_Red;
     [SerializeField] GameObject PlayerPrefab_Blue;
     //   List<Rigidbody> m_players = new List<Rigidbody>();
@@ -33,10 +39,14 @@ public class GameManager : MonoBehaviour
     [SerializeField] StartPoint[] startPoints_Red;
     [SerializeField] StartPoint[] startPoints_Blue;
 
-    int totalPlayerNum = 0;
+    [NonSerialized]
+    public int totalPlayerNum = 0;
 
     [SerializeField] List<List<Transform>> startPoint;
-    int speed = 3;
+    int speed = 6;
+
+    public bool isStart = false;
+
     private void Awake()
     {
         if (instance == null)
@@ -61,7 +71,24 @@ public class GameManager : MonoBehaviour
         //}
 
         Screen.SetResolution(960, 540, false);
+        //Time.timeScale = 0;
+    }
 
+    public void GameStartButton()
+    {
+        MyClient.instance.Send("START:1");
+    }
+
+    public void GameStart()
+    {
+        //Time.timeScale = 1;
+        isStart = true;
+    }
+
+    public void GameEnd()
+    {
+        //Time.timeScale = 0;
+        isStart = false;
     }
 
     public void PlayerCreate(int totalPlayerNum)
@@ -78,14 +105,12 @@ public class GameManager : MonoBehaviour
             for (int i = 0; i < totalPlayerNum; i++)
             {
                 if (i % 2 == 0)
-                {
-                    player[i] = Instantiate(PlayerPrefab_Red, startPoints_Red[0].startPoint[0].position, Quaternion.identity);
-                }
+                    player[i] = Instantiate(PlayerPrefab_Red_Host, startPoints_Red[0].startPoint[0].position, Quaternion.identity);
                 else
-                {
                     player[i] = Instantiate(PlayerPrefab_Blue, startPoints_Blue[0].startPoint[0].position, Quaternion.identity);
-                }
                 player[i].GetComponent<PlayerMove>().SetPlayerNum(i);
+                r_game[i] = player[i].GetComponent<Rigidbody>();
+                t_game[i] = player[i].transform;
             }
         }
         else
@@ -94,11 +119,17 @@ public class GameManager : MonoBehaviour
             int bluePointNum = 0;
             for (int i = 0; i < totalPlayerNum; i++)
             {
-                if (i % 2 == 0)
+                if (i == 0)
+                {
+                    player[i] = Instantiate(PlayerPrefab_Red_Host, startPoints_Red[1].startPoint[redPointNum++].position, Quaternion.identity);
+                }
+                else if (i % 2 == 0)
                     player[i] = Instantiate(PlayerPrefab_Red, startPoints_Red[1].startPoint[redPointNum++].position, Quaternion.identity);
                 else
                     player[i] = Instantiate(PlayerPrefab_Blue, startPoints_Blue[1].startPoint[bluePointNum++].position, Quaternion.identity);
                 player[i].GetComponent<PlayerMove>().SetPlayerNum(i);
+                r_game[i] = player[i].GetComponent<Rigidbody>();
+                t_game[i] = player[i].transform;
             }
         }
     }

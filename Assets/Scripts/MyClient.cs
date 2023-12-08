@@ -143,9 +143,6 @@ public class MyClient
 
         //Debug.Log("client receive : " + Encoding.Default.GetString(buffer));
 
-
-        //try
-        //{
         int bytesRead = obj.WorkingSocket.EndReceive(ar);
         if (bytesRead > 0)
         {
@@ -155,9 +152,11 @@ public class MyClient
             // 여기서 receivedData를 활용하여 필요한 작업 수행
             // 예시: 문자열로 변환하여 출력
             string[] split_receivedData = Encoding.Default.GetString(receivedData).Split(";");
-            for (int iter = 0; iter < split_receivedData.Length - 1; iter++)
+            Debug.Log(split_receivedData.Length);
+            for (int siter = 0; siter < split_receivedData.Length - 1; siter++)
             {
-                string receivedString = split_receivedData[iter];
+                string receivedString = split_receivedData[siter];
+                Debug.Log(receivedString);
                 if (receivedString != "")
                 {
                     string[] commands = receivedString.Split(":");
@@ -224,7 +223,6 @@ public class MyClient
                                 GameManager.instance.t_ball.gameObject.GetComponent<MeshRenderer>().enabled = true;
                                 GameManager.instance.t_ball.position = new Vector3(posX, posY, posZ);
 
-                            }
                         }
                         else if (commands[0] == "BALL_POSITION" && MyClient.instance.playerNum != 0)
                         {
@@ -249,32 +247,45 @@ public class MyClient
 
 
                         }
-                        //else if (commands[0] == "START_POSSIBILITY")
-                        //{
-                        //	if (int.Parse(commands[1]) == 0)
-                        //	{
-                        //		ClientManager.instance.StartButton_Interactable_False();
-                        //	}
-                        //	else
-                        //	{
-                        //		ClientManager.instance.StartButton_Interactable_True();
-                        //	}
-                        //}
-                        //else if (commands[0] == "TOTAL")
-                        //{
-                        //	GameManager.instance.PlayerCreate(int.Parse(commands[1]));
-                        //}
+                        else if (commands[0] == "START_POSSIBILITY")
+                        {
+                            if (playerNum == 0)
+                            {
+                                if (int.Parse(commands[1]) == 0)
+                                {
+                                    ClientManager.instance.StartButton_Interactable_False();
+                                }
+                                else
+                                {
+                                    ClientManager.instance.StartButton_Interactable_True();
+                                }
+                            }
+                        }
+                        else if (commands[0] == "TOTAL")
+                        {
+                            Debug.Log("total test11");
+                            GameManager.instance.PlayerCreate(int.Parse(commands[1]));
+                            Debug.Log("total test22");
+                        }
+                        else if (commands[0] == "START")
+                        {
+                            if (int.Parse(commands[1]) == 1)
+                            {
+                                GameManager.instance.GameStart();
+                            }
+                        }
                     }
                 }
                 //Debug.Log("Received: " + receivedString);
-
             }
-
-
+            Debug.Log("Received: " + Encoding.Default.GetString(receivedData));
         }
 
         // 다음 데이터 수신 대기
         obj.WorkingSocket.BeginReceive(obj.Buffer, 0, obj.Buffer.Length, 0, DataReceived, obj);
+        //try
+        //{
+
         //}
         //catch (Exception e)
         //{
