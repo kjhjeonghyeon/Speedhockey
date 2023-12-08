@@ -201,7 +201,12 @@ public class MyServer
                                 //host한텐 안보내도 되지만 걍 보내자(보내도 처리X)
                                 Send(receivedString, GetMyRoomNum(obj.WorkingSocket));
                             }
-                            else if (commands[0] == "GOAL")
+                            else if (commands[0] == "GOAL1")
+                            {
+                                //host한텐 안보내도 되지만 걍 보내자(보내도 처리X)
+                                Send(receivedString, GetMyRoomNum(obj.WorkingSocket));
+                            }
+                            else if (commands[0] == "GOAL2")
                             {
                                 //host한텐 안보내도 되지만 걍 보내자(보내도 처리X)
                                 Send(receivedString, GetMyRoomNum(obj.WorkingSocket));

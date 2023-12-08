@@ -15,8 +15,8 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
     public Text[] text=new Text[2];
-    public int red = 0;
-    public int blue = 0;
+    public int redScore = 0;
+    public int blueScore = 0;
     public GameObject[] player;
     [SerializeField] GameObject PlayerPrefab_Red;
     [SerializeField] GameObject PlayerPrefab_Blue;
@@ -47,8 +47,7 @@ public class GameManager : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
-        text[0].text = "0";
-        text[1].text = "0";
+        
     }
 
     // Start is called before the first frame update

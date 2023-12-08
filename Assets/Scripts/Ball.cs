@@ -20,23 +20,23 @@ public class Ball : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.name == "Goal1")
         {
-            GameManager.instance.red++;
+            if (MyClient.instance.playerNum == 0)
+            {
 
+                if (other.name == "Goal1")
+                {
+                    GameManager.instance.redScore++;
+                    MyClient.instance.Send("GOAL1" + ":" + GameManager.instance.redScore + ":" + "0" + ":" + "0.604" + ":" + "0");
+
+                }
+                else if (other.name == "Goal2")
+                {
+                    GameManager.instance.blueScore++;
+                    MyClient.instance.Send("GOAL2" + ":" + GameManager.instance.blueScore + ":" + "0" + ":" + "0.604" + ":" + "0");
+                }
+            }
         }
-        if (other.name == "Goal2")
-        {
-            GameManager.instance.blue++;
-        }
-        MyClient.instance.Send("GOAL" + ":" + GameManager.instance.red + ":" + GameManager.instance.blue);
-        StartCoroutine(goal());
-    }
-    IEnumerator goal()
-    {
-        yield return  null;
-        yield return new WaitForSeconds(1);
-        gameObject.transform.position = new Vector3(0, 0.604f, 0);
-        gameObject.GetComponent<MeshRenderer>().enabled = true;
+
     }
 }

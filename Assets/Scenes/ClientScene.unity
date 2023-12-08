@@ -855,6 +855,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerA2
       objectReference: {fileID: 0}
+    - target: {fileID: 4832548639960473946, guid: 3c10a7b09c7bdd54084dc603a2fc3ff2, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5176342260054192545, guid: 3c10a7b09c7bdd54084dc603a2fc3ff2, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -1198,6 +1202,10 @@ PrefabInstance:
     - target: {fileID: 514873367761026792, guid: 0ace53b6446cc524cbe0af147e226c75, type: 3}
       propertyPath: m_Name
       value: PlayerB2
+      objectReference: {fileID: 0}
+    - target: {fileID: 514873367761026792, guid: 0ace53b6446cc524cbe0af147e226c75, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4076506407111029815, guid: 0ace53b6446cc524cbe0af147e226c75, type: 3}
       propertyPath: m_RootOrder
@@ -2260,8 +2268,8 @@ MonoBehaviour:
   - {fileID: 6924031312997277952}
   - {fileID: 544630333}
   - {fileID: 706817616}
-  PlayerPrefab_Red: {fileID: 0}
-  PlayerPrefab_Blue: {fileID: 0}
+  PlayerPrefab_Red: {fileID: 514873367761026792, guid: 0ace53b6446cc524cbe0af147e226c75, type: 3}
+  PlayerPrefab_Blue: {fileID: 4832548639960473946, guid: 3c10a7b09c7bdd54084dc603a2fc3ff2, type: 3}
   r_game:
   - {fileID: 4215426943161083762}
   - {fileID: 6924031312997277951}
@@ -2544,6 +2552,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerA
       objectReference: {fileID: 0}
+    - target: {fileID: 4832548639960473946, guid: 3c10a7b09c7bdd54084dc603a2fc3ff2, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5176342260054192545, guid: 3c10a7b09c7bdd54084dc603a2fc3ff2, type: 3}
       propertyPath: speed
       value: 7
@@ -2627,6 +2639,10 @@ PrefabInstance:
     - target: {fileID: 514873367761026792, guid: 0ace53b6446cc524cbe0af147e226c75, type: 3}
       propertyPath: m_Name
       value: PlayerB
+      objectReference: {fileID: 0}
+    - target: {fileID: 514873367761026792, guid: 0ace53b6446cc524cbe0af147e226c75, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4076506407111029815, guid: 0ace53b6446cc524cbe0af147e226c75, type: 3}
       propertyPath: m_RootOrder
