@@ -14,7 +14,7 @@ public class StartPoint
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
-    public Text[] text=new Text[2];
+    public Text[] text = new Text[2];
     public int redScore = 0;
     public int blueScore = 0;
 
@@ -53,7 +53,7 @@ public class GameManager : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
-        
+
     }
 
     // Start is called before the first frame update
@@ -169,7 +169,20 @@ public class GameManager : MonoBehaviour
             // Debug.Log("recieve:" + playerNum + moveX + moveX);
         }
     }
-    
-          
-  
+
+
+    public  void originPosisition()
+    {
+        StartCoroutine(ioriginPosition());
+    }
+    IEnumerator ioriginPosition()
+    {
+
+        yield return null;
+        t_ball.GetComponent<MeshRenderer>().enabled = false;
+        yield return new WaitForSeconds(1);
+        t_ball.transform.position =new Vector3(0,0.604f,0);
+        t_ball.GetComponent<MeshRenderer>().enabled = true;
+
+    }
 }

@@ -191,17 +191,19 @@ public class MyClient
                         else if (commands[0] == "GOAL1")
                         {
                             Debug.Log(receivedString + " GAOL1 초기화");
-                            GameManager.instance.t_ball.gameObject.GetComponent<MeshRenderer>().enabled = false;
+                            //GameManager.instance.t_ball.gameObject.GetComponent<MeshRenderer>().enabled = false;
                             int redScore = int.Parse(commands[1]);
                             int posX = int.Parse(commands[2]);
                             float posY = float.Parse(commands[3]);
                             int posZ = int.Parse(commands[4]);
 
                             GameManager.instance.text[0].text = redScore.ToString();
+                            GameManager.instance.originPosisition();
                             if (playerNum != 0)
                             {
                                 GameManager.instance.redScore = redScore;
-                                GameManager.instance.t_ball.gameObject.GetComponent<MeshRenderer>().enabled = true;
+                                //GameManager.instance.t_ball.gameObject.GetComponent<MeshRenderer>().enabled = true;
+                                GameManager.instance.t_ball.position = new Vector3(posX, posY, posZ);
                                 GameManager.instance.t_ball.position = new Vector3(posX, posY, posZ);
 
                             }
@@ -210,17 +212,18 @@ public class MyClient
                         else if (commands[0] == "GOAL2")
                         {
                             Debug.Log(receivedString + " GAOL2 초기화");
-                            GameManager.instance.t_ball.gameObject.GetComponent<MeshRenderer>().enabled = false;
+                            //GameManager.instance.t_ball.gameObject.GetComponent<MeshRenderer>().enabled = false;
                             int blueScore = int.Parse(commands[1]);
                             int posX = int.Parse(commands[2]);
                             float posY = float.Parse(commands[3]);
                             int posZ = int.Parse(commands[4]);
                             GameManager.instance.text[1].text = blueScore.ToString();
+                            GameManager.instance.originPosisition();
                             if (playerNum != 0)
                             {
                                 GameManager.instance.redScore = blueScore;
-                                Debug.Log(GameManager.instance.t_ball.gameObject.GetComponent<MeshRenderer>().enabled);
-                                GameManager.instance.t_ball.gameObject.GetComponent<MeshRenderer>().enabled = true;
+                                //Debug.Log(GameManager.instance.t_ball.gameObject.GetComponent<MeshRenderer>().enabled);
+                                //GameManager.instance.t_ball.gameObject.GetComponent<MeshRenderer>().enabled = true;
                                 GameManager.instance.t_ball.position = new Vector3(posX, posY, posZ);
 
                             }
