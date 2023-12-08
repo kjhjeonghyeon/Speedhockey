@@ -196,7 +196,7 @@ public class MyClient
                             int posX = int.Parse(commands[2]);
                             float posY = float.Parse(commands[3]);
                             int posZ = int.Parse(commands[4]);
-                            
+
                             GameManager.instance.text[0].text = redScore.ToString();
                             if (playerNum != 0)
                             {
@@ -223,6 +223,7 @@ public class MyClient
                                 GameManager.instance.t_ball.gameObject.GetComponent<MeshRenderer>().enabled = true;
                                 GameManager.instance.t_ball.position = new Vector3(posX, posY, posZ);
 
+                            }
                         }
                         else if (commands[0] == "BALL_POSITION" && MyClient.instance.playerNum != 0)
                         {
@@ -335,7 +336,6 @@ public class MyClient
     //        Quaternion rotate = GameObject.FindGameObjectWithTag("BluePlayer").GetComponent<Transform>().rotation;
     //        return myData.standerdBallData(position, rotate);
     //    }
-
-
-
 }
+
+

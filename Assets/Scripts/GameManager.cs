@@ -17,10 +17,6 @@ public class GameManager : MonoBehaviour
     public Text[] text=new Text[2];
     public int redScore = 0;
     public int blueScore = 0;
-    public GameObject[] player;
-    public int red = 0;
-    public int blue = 0;
-    //public GameObject[] player;
 
     GameObject[] player = new GameObject[4];
     [SerializeField] GameObject PlayerPrefab_Red_Host;
