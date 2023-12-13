@@ -39,7 +39,7 @@ public class GameManager : MonoBehaviour
     public int totalPlayerNum = 0;
 
     [SerializeField] List<List<Transform>> startPoint;
-    int speed = 11;
+    int speed = 3;
 
     public bool isStart = false;
 
@@ -153,6 +153,7 @@ public class GameManager : MonoBehaviour
             //} 
             Debug.Log(playerNum + " 번 플레이어 움직여야해" + moveX + " " + moveY);
             //r_game[playerNum].velocity = new Vector3(moveX, 0, moveY).normalized * speed;
+            r_game[playerNum].velocity = Vector3.zero;
 			r_game[playerNum].AddForce(new Vector3(moveX, 0, moveY).normalized * speed, ForceMode.VelocityChange);
 			// Debug.Log("recieve:" + playerNum + moveX + moveX);
 		}

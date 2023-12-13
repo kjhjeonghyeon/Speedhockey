@@ -7,7 +7,7 @@ using UnityEngine;
 public class PlayerMove : MonoBehaviour
 {
     Vector3 movePosition;
-    int speed = 11;
+    int speed = 3;
     Rigidbody rb;
     int playerNum;
     float mouse_X;
@@ -53,7 +53,9 @@ public class PlayerMove : MonoBehaviour
                 if (MyClient.instance.playerNum == 0)
                 {
                     //rb.velocity = movePosition.normalized * speed;
-                    rb.AddForce(movePosition.normalized * speed, ForceMode.VelocityChange);
+                    rb.velocity = Vector3.zero;
+
+					rb.AddForce(movePosition.normalized * speed, ForceMode.VelocityChange);
                     //Debug.Log("호스트임!");
                     //byte[] buf = Encoding.Default.GetBytes("MOVE:" + MyClient.instance.playerNum + ":" + mouse_X + ":" + mouse_Y + ":");
                     //입력및 출력
