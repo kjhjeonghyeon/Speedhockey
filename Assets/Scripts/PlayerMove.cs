@@ -10,9 +10,12 @@ public class PlayerMove : MonoBehaviour
     int speed = 11;
     Rigidbody rb;
     int playerNum;
+    float mouse_X;
 
-    // Start is called before the first frame update
-    void Start()
+    float mouse_Y;
+
+	// Start is called before the first frame update
+	void Start()
     {
         rb = GetComponent<Rigidbody>();
     }
@@ -33,13 +36,15 @@ public class PlayerMove : MonoBehaviour
     }
     void InputMove()
     {
-        float mouse_X = Input.GetAxis("Mouse X");
-        float mouse_Y = Input.GetAxis("Mouse Y");
+        mouse_X = Input.GetAxis("Mouse X");
+        mouse_Y = Input.GetAxis("Mouse Y");
 
         if (MyClient.instance != null)
         {
             //Debug.Log(MyClient.client + " " + MyClient.client.Connected);
-            movePosition = new Vector3(mouse_X, 0, mouse_Y);
+            movePosition.x = mouse_X;
+            movePosition.z = mouse_Y;
+            
             //Debug.Log(rb.velocity);
             //transform.position += movePosition * Time.deltaTime * speed;
 
