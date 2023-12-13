@@ -76,19 +76,20 @@ public class PlayerMove : MonoBehaviour
     public void DataSend()
     {
         //공 데이터 보내기
-        byte[] buf1 = Encoding.Default.GetBytes("BALL_POSITION:" + GameManager.instance.t_ball.transform.position.x + ":" + GameManager.instance.t_ball.transform.position.y + ":" + GameManager.instance.t_ball.transform.position.z + ";");
-        MyClient.instance.Send(buf1);
+		string command="";
+        command += "BALL_POSITION:" + GameManager.instance.t_ball.transform.position.x + ":" + GameManager.instance.t_ball.transform.position.y + ":" + GameManager.instance.t_ball.transform.position.z + ";";
 
-        //플레이어 데이터 보내기
-        for (int i = 0; i < GameManager.instance.totalPlayerNum; i++)
+
+		//플레이어 데이터 보내기
+		for (int i = 0; i < GameManager.instance.totalPlayerNum; i++)
         {
-            string command;
-            if (GameManager.instance.t_game[i].position == null)
+            
+            if (GameManager.instance.t_game[i] == null)
                 break;
             Vector3 pos = GameManager.instance.t_game[i].position;
-            command = "PLAYER_POSITION:" + i + ":" + pos.x + ":" + pos.y + ":" + pos.z;
-            MyClient.instance.Send(command);
+            command += "PLAYER_POSITION:" + i + ":" + pos.x + ":" + pos.y + ":" + pos.z+";";
         }
+        MyClient.instance.Send(command);
     }
 
     public void SetPlayerNum(int num)
