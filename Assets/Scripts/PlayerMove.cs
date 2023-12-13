@@ -7,7 +7,7 @@ using UnityEngine;
 public class PlayerMove : MonoBehaviour
 {
     Vector3 movePosition;
-    int speed = 6;
+    int speed = 11;
     Rigidbody rb;
     int playerNum;
 

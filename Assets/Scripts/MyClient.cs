@@ -86,7 +86,8 @@ public class MyClient
     public void Connect()
     {
         mainSock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-        IPAddress serverAddr = IPAddress.Parse("127.0.0.1");//"10.0.0.10");
+        //IPAddress serverAddr = IPAddress.Parse("127.0.0.1");//"10.0.0.10");
+        IPAddress serverAddr = IPAddress.Parse("172.30.98.4");//"10.0.0.10");
         IPEndPoint clientEP = new IPEndPoint(serverAddr, m_port);
         mainSock.BeginConnect(clientEP, new AsyncCallback(ConnectCallback), mainSock);
     }

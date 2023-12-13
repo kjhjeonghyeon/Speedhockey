@@ -39,7 +39,7 @@ public class GameManager : MonoBehaviour
     public int totalPlayerNum = 0;
 
     [SerializeField] List<List<Transform>> startPoint;
-    int speed = 6;
+    int speed = 11;
 
     public bool isStart = false;
 
@@ -195,6 +195,7 @@ public class GameManager : MonoBehaviour
         t_ball.gameObject.SetActive(false);
 		yield return new WaitForSeconds(1);
 		t_ball.transform.position = new Vector3(0, 0.604f, 0);
+        t_ball.GetComponent<Rigidbody>().velocity = Vector3.zero;
         t_ball.gameObject.SetActive(true);
 
 	}
