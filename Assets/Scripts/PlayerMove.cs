@@ -52,10 +52,10 @@ public class PlayerMove : MonoBehaviour
             {
                 if (MyClient.instance.playerNum == 0)
                 {
-                    //rb.velocity = movePosition.normalized * speed;
-                    rb.velocity = Vector3.zero;
-
-					rb.AddForce(movePosition.normalized * speed, ForceMode.VelocityChange);
+                    rb.velocity = movePosition.normalized * speed;
+                    //rb.velocity = Vector3.zero;
+					//rb.AddForce(movePosition.normalized * speed, ForceMode.VelocityChange);
+                    
                     //Debug.Log("호스트임!");
                     //byte[] buf = Encoding.Default.GetBytes("MOVE:" + MyClient.instance.playerNum + ":" + mouse_X + ":" + mouse_Y + ":");
                     //입력및 출력
